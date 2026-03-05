@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>B.Ed Vault</title>
 
@@ -13,21 +13,26 @@
 
 /* GLOBAL */
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
-font-family:Poppins;
+font-family:Poppins, sans-serif;
 background:#f3f6fb;
+overflow-x:hidden;
 }
 
 /* HEADER */
 
 .app-header{
 background:linear-gradient(135deg,#0da6ff,#0072ff);
-padding:22px;
+padding:20px;
 border-bottom-left-radius:26px;
 border-bottom-right-radius:26px;
 color:white;
-font-size:22px;
+font-size:20px;
 font-weight:600;
 display:flex;
 align-items:center;
@@ -39,9 +44,11 @@ box-shadow:0 8px 25px rgba(0,0,0,0.15);
 
 .page{
 display:none;
-padding:18px;
-padding-bottom:110px;
+padding:16px;
+padding-bottom:120px;
 animation:fade .3s;
+max-width:900px;
+margin:auto;
 }
 
 .page.active{
@@ -77,6 +84,7 @@ box-shadow:0 8px 20px rgba(0,0,0,0.08);
 margin:0;
 color:#0077ff;
 cursor:pointer;
+font-size:16px;
 }
 
 .dropdown{
@@ -92,6 +100,7 @@ display:block;
 margin:10px 0;
 border-bottom:1px solid #eee;
 padding-bottom:4px;
+font-size:14px;
 }
 
 /* FILE CARD */
@@ -104,6 +113,8 @@ margin-top:8px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+gap:10px;
+flex-wrap:wrap;
 }
 
 .download{
@@ -113,6 +124,7 @@ padding:6px 12px;
 border-radius:6px;
 font-size:12px;
 text-decoration:none;
+white-space:nowrap;
 }
 
 /* POPUPS */
@@ -128,13 +140,15 @@ display:none;
 justify-content:center;
 align-items:center;
 z-index:1000;
+padding:20px;
 }
 
 .popupbox{
 background:white;
 padding:25px;
 border-radius:14px;
-width:300px;
+width:100%;
+max-width:320px;
 text-align:center;
 }
 
@@ -152,6 +166,7 @@ margin:6px;
 .bottom-nav{
 position:fixed;
 bottom:0;
+left:0;
 width:100%;
 height:70px;
 background:#ff8c00;
@@ -161,16 +176,27 @@ align-items:center;
 border-top-left-radius:22px;
 border-top-right-radius:22px;
 box-shadow:0 -6px 20px rgba(0,0,0,0.2);
+z-index:500;
 }
 
+/* NAV ITEMS */
+
 .nav-item{
+flex:1;
 text-align:center;
 color:white;
-font-size:12px;
+font-size:11px;
+font-weight:500;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 }
 
 .nav-icon{
 font-size:22px;
+color:white;
+margin-bottom:2px;
 }
 
 /* CENTER BUTTON */
@@ -178,6 +204,8 @@ font-size:22px;
 .center-btn{
 position:absolute;
 top:-28px;
+left:50%;
+transform:translateX(-50%);
 background:#ff8c00;
 width:65px;
 height:65px;
@@ -188,6 +216,24 @@ justify-content:center;
 font-size:26px;
 color:white;
 box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* INPUT */
+
+input[type=file]{
+width:100%;
+max-width:320px;
+}
+
+/* BUTTON */
+
+button{
+padding:10px 18px;
+border-radius:8px;
+border:none;
+background:#0072ff;
+color:white;
+font-size:14px;
 }
 
 </style>
