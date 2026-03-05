@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>B.Ed Vault</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL */
+
+body{
+margin:0;
+font-family:Poppins;
+background:#f3f6fb;
+}
+
+/* HEADER */
+
+.app-header{
+background:linear-gradient(135deg,#0da6ff,#0072ff);
+padding:22px;
+border-bottom-left-radius:26px;
+border-bottom-right-radius:26px;
+color:white;
+font-size:22px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:10px;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* PAGES */
+
+.page{
+display:none;
+padding:18px;
+padding-bottom:110px;
+animation:fade .3s;
+}
+
+.page.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* CARDS */
+
+.card{
+background:white;
+border-radius:14px;
+padding:15px;
+margin-bottom:14px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* SEMESTER */
+
+.semester{
+background:white;
+border-radius:14px;
+padding:14px;
+margin-bottom:14px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.semester h3{
+margin:0;
+color:#0077ff;
+cursor:pointer;
+}
+
+.dropdown{
+display:none;
+margin-top:10px;
+}
+
+.dropdown.show{
+display:block;
+}
+
+.category h4{
+margin:10px 0;
+border-bottom:1px solid #eee;
+padding-bottom:4px;
+}
+
+/* FILE CARD */
+
+.file{
+background:#f7fbff;
+padding:10px;
+border-radius:10px;
+margin-top:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.download{
+background:#0da6ff;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+font-size:12px;
+text-decoration:none;
+}
+
+/* POPUPS */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.popupbox{
+background:white;
+padding:25px;
+border-radius:14px;
+width:300px;
+text-align:center;
+}
+
+.popupbox button{
+background:#0072ff;
+border:none;
+color:white;
+padding:8px 14px;
+border-radius:8px;
+margin:6px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+height:70px;
+background:#ff8c00;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top-left-radius:22px;
+border-top-right-radius:22px;
+box-shadow:0 -6px 20px rgba(0,0,0,0.2);
+}
+
+.nav-item{
+text-align:center;
+color:white;
+font-size:12px;
+}
+
+.nav-icon{
+font-size:22px;
+}
+
+/* CENTER BUTTON */
+
+.center-btn{
+position:absolute;
+top:-28px;
+background:#ff8c00;
+width:65px;
+height:65px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+color:white;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="app-header">
+🔒 B.Ed Vault
+</div>
+
+<!-- HOME -->
+
+<div id="home" class="page active">
+
+<div class="card">
+Welcome to B.Ed Vault.  
+Access books, previous papers and important questions easily.
+</div>
+
+</div>
+
+<!-- FILES -->
+
+<div id="files" class="page">
+
+<div class="semester">
+
+<h3 onclick="toggleSemester('sem1')">First Semester</h3>
+
+<div id="sem1" class="dropdown">
+
+<div class="category">
+
+<h4>Books</h4>
+
+<div class="file">
+
+<div>
+<b>Child Development</b><br>
+<small>Author: John Smith</small>
+</div>
+
+<a class="download"
+href="https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/main/books/TNTEU%20-%20Academic%20Calendar%202025-26%20Circulation%20to%20all%20Affiliated%20Colleges%20-%20Reg%20(1).bed"
+download="Child Development.pdf">
+Download
+</a>
+
+</div>
+
+</div>
+
+<div class="category">
+
+<h4>Previous Year Question Papers</h4>
+
+<div class="file">
+
+<div>Child Development 2023</div>
+
+<a class="download" href="#">Download</a>
+
+</div>
+
+</div>
+
+<div class="category">
+
+<h4>Important Questions</h4>
+
+<div class="file">
+
+<div>Child Development Important Questions</div>
+
+<a class="download" href="#">Download</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- OPEN -->
+
+<div id="open" class="page">
+
+<h3>Open Encrypted File (.bed)</h3>
+
+<input type="file" id="fileInput" accept=".bed">
+
+<br><br>
+
+<button onclick="openBedFile()">Open File</button>
+
+<p id="status"></p>
+
+</div>
+
+<!-- NOTIFICATIONS -->
+
+<div id="notification" class="page">
+
+<div id="list">Loading notifications...</div>
+
+</div>
+
+<!-- ABOUT -->
+
+<div id="about" class="page">
+
+<div class="card">
+B.Ed Vault provides study materials and previous question papers for B.Ed students.
+</div>
+
+</div>
+
+<!-- PAYMENT POPUP -->
+
+<div id="buyPopup" class="popup">
+
+<div class="popupbox">
+
+<h3>Unlock Full Access</h3>
+
+📚 B.Ed Notes<br>
+📄 Previous Papers<br>
+❗ Important Questions<br>
+
+<br>
+
+<h2>₹149</h2>
+
+<button onclick="showPay()">Pay</button>
+<button onclick="showDevice()">I Paid</button>
+
+</div>
+
+</div>
+
+<div id="payPopup" class="popup">
+
+<div class="popupbox">
+
+Send ₹149 to UPI:
+
+<br><br>
+
+<b>YOURUPI@upi</b>
+
+<br>
+
+<button onclick="closePopups()">Close</button>
+
+</div>
+
+</div>
+
+<div id="devicePopup" class="popup">
+
+<div class="popupbox">
+
+<h3>Your Device ID</h3>
+
+<p id="deviceID"></p>
+
+Send this ID with payment screenshot.
+
+</div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+<div class="nav-item" onclick="showPage('files')">
+<div class="nav-icon">📚</div>
+Files
+</div>
+
+<div class="nav-item" onclick="showPage('notification')">
+<div class="nav-icon">🔔</div>
+Alerts
+</div>
+
+<div class="center-btn" onclick="showPage('home')">
+🏠
+</div>
+
+<div class="nav-item" onclick="openMenu()">
+<div class="nav-icon">📂</div>
+Open
+</div>
+
+<div class="nav-item" onclick="showPage('about')">
+<div class="nav-icon">ℹ️</div>
+About
+</div>
+
+</div>
+
+<script>
+
+/* PAGE SWITCH */
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+}
+
+/* SEMESTER */
+
+function toggleSemester(id){
+document.getElementById(id).classList.toggle("show")
+}
+
+/* DEVICE ID */
+
+function getDeviceID(){
+
+let id=localStorage.getItem("device")
+
+if(!id){
+id=crypto.randomUUID()
+localStorage.setItem("device",id)
+}
+
+return id
+}
+
+/* OPEN LOCK */
+
+async function openMenu(){
+
+showPage("open")
+
+let device=getDeviceID()
+
+let url="https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/main/devices.json"
+
+try{
+
+let res=await fetch(url+"?t="+Date.now())
+
+let data=await res.json()
+
+if(data.devices && data.devices[device]===true){
+
+}else{
+
+document.getElementById("buyPopup").style.display="flex"
+
+}
+
+}catch{
+
+document.getElementById("buyPopup").style.display="flex"
+
+}
+
+}
+
+/* POPUPS */
+
+function showPay(){
+document.getElementById("payPopup").style.display="flex"
+}
+
+function showDevice(){
+document.getElementById("deviceID").innerText=getDeviceID()
+document.getElementById("devicePopup").style.display="flex"
+}
+
+function closePopups(){
+document.querySelectorAll(".popup").forEach(p=>p.style.display="none")
+}
+
+/* OPEN BED FILE */
+
+async function openBedFile(){
+
+const file=document.getElementById("fileInput").files[0]
+
+if(!file){
+alert("Select .bed file")
+return
+}
+
+document.getElementById("status").innerText="Decrypting..."
+
+try{
+
+const buffer=await file.arrayBuffer()
+
+const data=new Uint8Array(buffer)
+
+const key=data.slice(0,32)
+const iv=data.slice(32,44)
+const encrypted=data.slice(44)
+
+const cryptoKey=await crypto.subtle.importKey(
+"raw",
+key,
+{name:"AES-GCM"},
+false,
+["decrypt"]
+)
+
+const decrypted=await crypto.subtle.decrypt(
+{name:"AES-GCM",iv:iv},
+cryptoKey,
+encrypted
+)
+
+const pdfBlob=new Blob([decrypted],{type:"application/pdf"})
+
+const url=URL.createObjectURL(pdfBlob)
+
+window.open(url,"_blank")
+
+document.getElementById("status").innerText="Opened in new tab"
+
+}catch{
+
+document.getElementById("status").innerText="Failed to open"
+
+}
+
+}
+
+/* NOTIFICATIONS */
+
+async function loadNotifications(){
+
+const proxy="https://api.codetabs.com/v1/proxy/?quest="
+const target="https://www.tnteu.ac.in/notifications.php?nid=5"
+
+const res=await fetch(proxy+encodeURIComponent(target))
+const html=await res.text()
+
+const doc=new DOMParser().parseFromString(html,"text/html")
+
+const wrappers=doc.querySelectorAll(".sectionWrapper")
+
+let links=[]
+
+wrappers.forEach(w=>{
+w.querySelectorAll("a").forEach(a=>links.push(a))
+})
+
+const list=document.getElementById("list")
+
+for(let i=0;i<70;i++){
+
+let url="https://www.tnteu.ac.in/"+links[i].getAttribute("href")
+
+let div=document.createElement("div")
+
+div.className="card"
+
+div.innerHTML=`<a href="${url}" target="_blank">${links[i].innerText}</a>`
+
+list.appendChild(div)
+
+}
+
+}
+
+loadNotifications()
+
+</script>
+
+</body>
+</html>
