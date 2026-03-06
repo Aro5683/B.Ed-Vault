@@ -7,18 +7,13 @@
 
 <title>B.Ed Vault</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0077ff">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Inter',sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
@@ -31,8 +26,6 @@ color:#222;
 display:none;
 }
 
-/* HEADER */
-
 header{
 text-align:center;
 margin-bottom:25px;
@@ -43,14 +36,10 @@ font-size:32px;
 color:#0077ff;
 }
 
-/* CONTAINER */
-
 .container{
 max-width:900px;
 margin:auto;
 }
-
-/* UPLOAD */
 
 .uploadBox{
 background:white;
@@ -78,28 +67,18 @@ font-size:13px;
 color:#666;
 }
 
-/* BUTTON */
-
 button{
 background:#0077ff;
 color:white;
 border:none;
-padding:8px 16px;
+padding:10px 18px;
 border-radius:6px;
 cursor:pointer;
-font-size:14px;
 }
 
 button:hover{
 background:#005fd1;
 }
-
-.closeBtn{
-background:#ff4d4d;
-margin-top:10px;
-}
-
-/* TABLE */
 
 table{
 width:100%;
@@ -128,17 +107,6 @@ color:#666;
 text-align:right;
 }
 
-/* SELECT */
-
-select{
-padding:6px;
-border-radius:4px;
-border:1px solid #ccc;
-margin-bottom:12px;
-}
-
-/* POPUP */
-
 .popup{
 position:fixed;
 top:0;
@@ -149,7 +117,6 @@ background:rgba(0,0,0,.6);
 display:none;
 align-items:center;
 justify-content:center;
-z-index:999;
 }
 
 .popupContent{
@@ -168,25 +135,6 @@ padding:10px;
 margin-top:10px;
 border:1px solid #ccc;
 border-radius:5px;
-}
-
-/* NOTICE */
-
-.notice-card{
-background:white;
-padding:12px;
-margin-bottom:10px;
-border-radius:6px;
-}
-
-.notice-title{
-font-weight:500;
-margin-bottom:5px;
-}
-
-.notice-link{
-font-size:13px;
-color:#0077ff;
 }
 
 </style>
@@ -218,82 +166,6 @@ Upload .bed file
 
 </div>
 
-<h3>First Semester</h3>
-
-<select id="mediumSelect" onchange="changeMedium()">
-<option value="tamil">Tamil Medium</option>
-<option value="english">English Medium</option>
-</select>
-
-<h4>Books</h4>
-<table id="booksTable"></table>
-
-<h4>Previous Year Questions</h4>
-<table id="pyqTable"></table>
-
-<h4>Important Questions</h4>
-<table id="impTable"></table>
-
-<h3>TNTEU Notifications</h3>
-<div id="list"></div>
-
-</div>
-
-<!-- ACTIVATION POPUP -->
-
-<div class="popup" id="activationPopup">
-
-<div class="popupContent">
-
-<h3>Device Activation Required</h3>
-
-<p>Activate device to decrypt files</p>
-
-<b>₹149</b>
-
-<p>UPI: yourupi@upi</p>
-
-<button onclick="showForm()">Proceed</button>
-<button class="closeBtn" onclick="closePopup('activationPopup')">Exit</button>
-
-</div>
-
-</div>
-
-<!-- FORM POPUP -->
-
-<div class="popup" id="formPopup">
-
-<div class="popupContent">
-
-<h3>User Details</h3>
-
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
-
-<select id="gender">
-<option value="">Gender</option>
-<option>Male</option>
-<option>Female</option>
-</select>
-
-<input id="phone" placeholder="Phone Number">
-
-<select id="promo">
-<option value="">Allow promotional messages</option>
-<option>Agree</option>
-<option>Disagree</option>
-</select>
-
-<input id="deviceId" readonly>
-
-<br>
-
-<button onclick="sendWhatsapp()">Send WhatsApp</button>
-<button class="closeBtn" onclick="closePopup('formPopup')">Exit</button>
-
-</div>
-
 </div>
 
 <script>
@@ -301,8 +173,7 @@ Upload .bed file
 /* ACTIVATED DEVICES */
 
 const activatedDevices={
-"DEV-x61gcj90p":true,
-  "DEV-e98lstpqf":true
+"DEV-demo123":true
 }
 
 /* FILE NAME */
@@ -329,106 +200,6 @@ return id
 
 }
 
-/* TABLE DATA */
-
-const tamilData={
-books:[["BED_BOOK_T1","Dr Kumar","#"]],
-pyq:[["BED_PYQ_T1","University","#"]],
-imp:[["BED_IMP_T1","Faculty","#"]]
-}
-
-const englishData={
-books:[["BED_BOOK_E1","Dr John","#"]],
-pyq:[["BED_PYQ_E1","University","#"]],
-imp:[["BED_IMP_E1","Faculty","#"]]
-}
-
-/* LOAD TABLE */
-
-function loadTable(id,data){
-
-let html=""
-
-data.forEach(x=>{
-
-html+=`
-<tr>
-<td>
-<div class="fileName">${x[0]}</div>
-<div class="author">${x[1]}</div>
-</td>
-<td class="downloadCell">
-<button>Download</button>
-</td>
-</tr>
-`
-
-})
-
-document.getElementById(id).innerHTML=html
-
-}
-
-function changeMedium(){
-
-let medium=mediumSelect.value
-
-let data=medium==="tamil"?tamilData:englishData
-
-loadTable("booksTable",data.books)
-loadTable("pyqTable",data.pyq)
-loadTable("impTable",data.imp)
-
-}
-
-changeMedium()
-
-/* POPUP CONTROL */
-
-function showForm(){
-
-activationPopup.style.display="none"
-formPopup.style.display="flex"
-
-deviceId.value=getDeviceId()
-
-}
-
-function closePopup(id){
-document.getElementById(id).style.display="none"
-}
-
-/* WHATSAPP */
-
-function sendWhatsapp(){
-
-let name=document.getElementById("name").value
-let age=document.getElementById("age").value
-let gender=document.getElementById("gender").value
-let phone=document.getElementById("phone").value
-let promo=document.getElementById("promo").value
-let device=document.getElementById("deviceId").value
-
-if(!name||!age||!gender||!phone||!promo){
-alert("Fill all details")
-return
-}
-
-let msg=`Name:${name}
-Age:${age}
-Gender:${gender}
-Phone:${phone}
-Promo:${promo}
-Device:${device}
-
-I paid. Please activate.`
-
-let url="https://wa.me/919655969516?text="+encodeURIComponent(msg)
-
-window.open(url,"_blank")
-
-}
-
 /* DECRYPT */
 
 async function decryptFile(){
@@ -436,15 +207,20 @@ async function decryptFile(){
 let file=bedFile.files[0]
 
 if(!file){
+
 alert("Upload .bed file")
 return
+
 }
 
 let device=getDeviceId()
 
 if(!activatedDevices[device]){
-activationPopup.style.display="flex"
+
+alert("Device not activated")
+
 return
+
 }
 
 const buffer=await file.arrayBuffer()
@@ -453,68 +229,33 @@ const iv=buffer.slice(0,12)
 const keyData=buffer.slice(12,44)
 const encrypted=buffer.slice(44)
 
-const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["decrypt"])
+const key=await crypto.subtle.importKey(
+"raw",
+keyData,
+{name:"AES-GCM"},
+false,
+["decrypt"]
+)
 
-const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
+const decrypted=await crypto.subtle.decrypt(
+{name:"AES-GCM",iv:new Uint8Array(iv)},
+key,
+encrypted
+)
 
-const blob = new Blob([decrypted],{type:"application/pdf"})
+/* convert to base64 */
 
-const pdfUrl = URL.createObjectURL(blob)
+let base64 = btoa(
+String.fromCharCode(...new Uint8Array(decrypted))
+)
 
-/* store temporarily */
-localStorage.setItem("tempPDF", pdfUrl)
+sessionStorage.setItem("pdfData",base64)
 
 /* open viewer */
+
 window.open("viewer.html","_blank")
 
-/* NOTIFICATIONS */
-
-async function loadNotifications(){
-
-if(!navigator.onLine) return
-
-const list=document.getElementById("list")
-
-try{
-
-const proxy="https://api.codetabs.com/v1/proxy/?quest="
-const target="https://www.tnteu.ac.in/notifications.php?nid=5"
-
-const res=await fetch(proxy+encodeURIComponent(target))
-const html=await res.text()
-
-const doc=new DOMParser().parseFromString(html,"text/html")
-
-const wrappers=doc.querySelectorAll(".sectionWrapper")
-
-let links=[]
-
-wrappers.forEach(w=>{
-w.querySelectorAll("a").forEach(a=>links.push(a))
-})
-
-for(let i=0;i<Math.min(links.length,20);i++){
-
-let url="https://www.tnteu.ac.in/"+links[i].getAttribute("href")
-
-let div=document.createElement("div")
-
-div.className="notice-card"
-
-div.innerHTML=`
-<div class="notice-title">${links[i].innerText}</div>
-<a class="notice-link" href="${url}" target="_blank">Open Notification</a>
-`
-
-list.appendChild(div)
-
 }
-
-}catch{}
-
-}
-
-loadNotifications()
 
 </script>
 
