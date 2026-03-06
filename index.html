@@ -458,8 +458,9 @@ const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv
 
 const blob=new Blob([decrypted],{type:"application/pdf"})
 
-window.open("viewer.html?file="+pdfUrl)
+const pdfUrl = URL.createObjectURL(blob)
 
+window.open("viewer.html?file="+encodeURIComponent(pdfUrl),"_blank")
 }
 
 /* NOTIFICATIONS */
