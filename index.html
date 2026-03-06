@@ -1,0 +1,610 @@
+< html>
+
+
+
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+#bedFile{
+display:none;
+}
+
+body{
+background:#eef2f7;
+padding:20px;
+color:#222;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:24px;
+}
+
+header h1{
+font-size:32px;
+background:linear-gradient(90deg,#0077ff,#00c6ff);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+/* CONTAINER */
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+/* UPLOAD */
+
+.uploadBox{
+background:white;
+padding:20px;
+margin-bottom:25px;
+}
+
+.uploadArea{
+border:2px dashed #7bb7ff;
+padding:25px;
+background:#f7fbff;
+cursor:pointer;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+min-height:120px;
+text-align:center;
+}
+
+.uploadArea span{
+font-size:14px;
+color:#444;
+}
+
+#fileName{
+font-size:13px;
+color:#666;
+margin-top:6px;
+}
+/* BUTTON */
+
+button{
+background:#0077ff;
+color:white;
+border:none;
+padding:8px 16px;
+border-radius:4px;
+cursor:pointer;
+}
+
+button:hover{
+background:#005fd1;
+}
+
+/* TABLE */
+
+.tableWrap{
+width:100%;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+table-layout:fixed;
+}
+
+tr{
+border-bottom:1px solid #ddd;
+}
+
+td{
+padding:12px 8px;
+vertical-align:middle;
+word-wrap:break-word;
+}
+
+.fileName{
+font-weight:600;
+}
+
+.author{
+font-size:13px;
+color:#666;
+margin-top:2px;
+}
+
+.downloadCell{
+text-align:right;
+width:110px;
+}
+
+/* SELECT */
+
+select{
+padding:6px;
+border-radius:4px;
+border:1px solid #ccc;
+margin-bottom:12px;
+}
+
+/* POPUPS */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:999;
+}
+
+.popupContent{
+background:white;
+padding:20px;
+width:100%;
+max-width:420px;
+text-align:center;
+}
+
+.popupContent input,
+.popupContent select{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ccc;
+}
+
+/* NOTIFICATIONS */
+
+.notice-card{
+background:white;
+padding:14px;
+margin-bottom:10px;
+border-bottom:1px solid #ddd;
+}
+
+.notice-title{
+font-weight:500;
+margin-bottom:6px;
+}
+
+.notice-link{
+font-size:13px;
+color:#0077ff;
+text-decoration:none;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+header h1{
+font-size:24px;
+}
+
+}
+
+</style>
+
+
+
+
+
+<header>
+<h1>B.Ed Vault</h1>
+</header>
+
+<div class="container">
+
+<!-- UPLOAD -->
+
+<div class="uploadBox">
+
+<h3>Upload .bed File to Decrypt</h3>
+
+<label class="uploadArea" onclick="bedFile.click()">
+
+<span>Upload .bed file</span>
+<div id="fileName">No file selected</div>
+
+</label>
+
+<input type="file" id="bedFile" accept=".bed" />
+
+<br />
+
+<button onclick="decryptFile()">Decrypt File</button>
+
+</div>
+<!-- SEMESTER -->
+
+<h3>First Semester</h3>
+
+<select id="mediumSelect" onchange="changeMedium()">
+<option value="tamil" />Tamil Medium
+<option value="english" />English Medium
+</select>
+
+<h4>Books</h4>
+
+<div class="tableWrap">
+<table id="booksTable"></table>
+</div>
+
+<h4>Previous Year Questions</h4>
+
+<div class="tableWrap">
+<table id="pyqTable"></table>
+</div>
+
+<h4>Important Questions</h4>
+
+<div class="tableWrap">
+<table id="impTable"></table>
+</div>
+
+<br /><br />
+
+<!-- NOTIFICATIONS -->
+
+<h3>TNTEU Notifications</h3>
+<div id="list"></div>
+
+</div>
+
+<!-- ACTIVATION POPUP -->
+
+<div class="popup" id="activationPopup">
+
+<div class="popupContent">
+
+<h3>Device Activation Required</h3>
+
+<p>Activate device to decrypt files</p>
+
+<b>₹149</b>
+
+<p>UPI: yourupi@upi</p>
+
+<button onclick="showForm()">Proceed</button>
+
+</div>
+
+</div>
+
+<!-- FORM -->
+
+<div class="popup" id="formPopup">
+
+<div class="popupContent">
+
+<h3>User Details</h3>
+
+<input id="name" placeholder="Name" required />
+<input id="age" placeholder="Age" required />
+
+<select id="gender" required>
+<option value="" />Gender
+<option />Male
+<option />Female
+</select>
+
+<input id="phone" placeholder="Phone Number" required />
+
+<select id="promo" required>
+<option value="" />Allow promotional messages
+<option />Agree
+<option />Disagree
+</select>
+
+<input id="deviceId" readonly />
+
+<button onclick="handleSend()">Send</button>
+
+</div>
+
+</div>
+
+<!-- INSTALL -->
+
+<div class="popup" id="installPopup">
+
+<div class="popupContent">
+
+<h3>Add to Home Screen</h3>
+
+<p>Please add this site to home screen before continuing.</p>
+
+<button onclick="confirmInstall()">OK</button>
+
+</div>
+
+</div>
+
+<script>
+
+/* FILE NAME DISPLAY */
+
+bedFile.onchange=function(){
+fileName.innerText=this.files[0].name
+}
+
+/* DEVICE ID */
+
+function getDeviceId(){
+
+let id=localStorage.getItem("device_id")
+
+if(!id){
+id="DEV-"+Math.random().toString(36).substr(2,9)
+localStorage.setItem("device_id",id)
+}
+
+return id
+
+}
+
+/* DOWNLOAD DATA (PUT YOUR LINKS HERE) */
+
+const tamilData={
+books:[
+["BED_BOOK_T1","Dr Kumar","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_book1.bed"]
+],
+pyq:[
+["BED_PYQ_T1","University","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_pyq1.bed"]
+],
+imp:[
+["BED_IMP_T1","Faculty","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_imp1.bed"]
+]
+}
+
+const englishData={
+books:[
+["BED_BOOK_E1","Dr John","https://raw.githubusercontent.com/USERNAME/repo/main/english_book1.bed"]
+],
+pyq:[
+["BED_PYQ_E1","University","https://raw.githubusercontent.com/USERNAME/repo/main/english_pyq1.bed"]
+],
+imp:[
+["BED_IMP_E1","Faculty","https://raw.githubusercontent.com/USERNAME/repo/main/english_imp1.bed"]
+]
+}
+
+/* TABLE LOADER */
+
+function loadTable(id,data){
+
+let html=""
+
+data.forEach(x=>{
+
+html+=`
+<tr>
+
+<td>
+
+<div class="fileName">${x[0]}</div>
+<div class="author">${x[1]}</div>
+
+</td>
+
+<td class="downloadCell">
+
+<a href="${x[2]}" download>
+<button>Download</button>
+</a>
+
+</td>
+
+</tr>`
+
+})
+
+document.getElementById(id).innerHTML=html
+
+}
+
+/* MEDIUM SWITCH */
+
+function changeMedium(){
+
+let medium=mediumSelect.value
+let data=medium==="tamil"?tamilData:englishData
+
+loadTable("booksTable",data.books)
+loadTable("pyqTable",data.pyq)
+loadTable("impTable",data.imp)
+
+}
+
+changeMedium()
+
+/* POPUPS */
+
+function showForm(){
+
+activationPopup.style.display="none"
+formPopup.style.display="flex"
+
+deviceId.value=getDeviceId()
+
+}
+
+let installConfirmed=false
+
+function handleSend(){
+
+if(!installConfirmed){
+installPopup.style.display="flex"
+return
+}
+
+sendWhatsapp()
+
+}
+
+function confirmInstall(){
+
+installPopup.style.display="none"
+installConfirmed=true
+
+}
+
+/* WHATSAPP MESSAGE */
+
+function sendWhatsapp(){
+
+let name=name.value
+let age=age.value
+let gender=gender.value
+let phone=phone.value
+let promo=promo.value
+let device=deviceId.value
+
+if(!name||!age||!gender||!phone||!promo){
+alert("Fill all details")
+return
+}
+
+let msg=`Name:${name}
+Age:${age}
+Gender:${gender}
+Phone:${phone}
+Promo:${promo}
+Device:${device}
+
+I paid. Please activate.`
+
+window.open(`https://wa.me/919655969516?text=${encodeURIComponent(msg)}`)
+
+}
+
+/* DECRYPT */
+
+async function decryptFile(){
+
+let file=bedFile.files[0]
+
+if(!file){
+alert("Upload .bed file")
+return
+}
+
+let device=getDeviceId()
+
+let data=JSON.parse(localStorage.getItem("devices")||"{}")
+
+if(Object.keys(data).length===0){
+
+try{
+
+let res=await fetch("https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/refs/heads/main/devices.json")
+
+data=await res.json()
+
+localStorage.setItem("devices",JSON.stringify(data))
+
+}catch{}
+
+}
+
+if(!data[device]){
+
+activationPopup.style.display="flex"
+return
+
+}
+
+const buffer=await file.arrayBuffer()
+
+const iv=buffer.slice(0,12)
+const keyData=buffer.slice(12,44)
+const encrypted=buffer.slice(44)
+
+const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["decrypt"])
+
+const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
+
+const blob=new Blob([decrypted],{type:"application/pdf"})
+
+window.open(URL.createObjectURL(blob))
+
+}
+
+/* TNTEU NOTIFICATIONS */
+
+async function loadNotifications(){
+
+const list=document.getElementById("list")
+
+try{
+
+const proxy="https://api.codetabs.com/v1/proxy/?quest="
+const target="https://www.tnteu.ac.in/notifications.php?nid=5"
+
+const res=await fetch(proxy+encodeURIComponent(target))
+const html=await res.text()
+
+const doc=new DOMParser().parseFromString(html,"text/html")
+
+const wrappers=doc.querySelectorAll(".sectionWrapper")
+
+let links=[]
+
+wrappers.forEach(w=>{
+w.querySelectorAll("a").forEach(a=>links.push(a))
+})
+
+list.innerHTML=""
+
+for(let i=0;i<Math.min(links.length,70);i++){
+
+let url="https://www.tnteu.ac.in/"+links[i].getAttribute("href")
+
+let div=document.createElement("div")
+div.className="notice-card"
+
+div.innerHTML=`
+<div class="notice-title">${links[i].innerText}</div>
+<a class="notice-link" href="${url}" target="_blank">Open Notification →</a>
+`
+
+list.appendChild(div)
+
+}
+
+}catch{
+
+list.innerHTML="<div class='notice-card'>Unable to load notifications</div>"
+
+}
+
+}
+
+loadNotifications()
+
+</script>
+
+
+</html>
