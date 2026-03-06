@@ -13,10 +13,6 @@
 body{
 margin:0;
 background:#111;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
 }
 
 iframe{
@@ -25,42 +21,28 @@ height:100vh;
 border:none;
 }
 
-#openBtn{
-background:#2b6fd4;
-color:white;
-border:none;
-padding:25px 60px;
-font-size:28px;
-border-radius:20px;
-cursor:pointer;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<button id="openBtn">Open PDF</button>
-
-<iframe id="pdfFrame" style="display:none"></iframe>
+<iframe id="pdfFrame"></iframe>
 
 <script>
 
-const url = localStorage.getItem("tempPDF")
+let base64 = sessionStorage.getItem("pdfData")
 
-const btn = document.getElementById("openBtn")
-const frame = document.getElementById("pdfFrame")
+if(base64){
 
-btn.onclick = function(){
+let pdfUrl = "data:application/pdf;base64," + base64
 
-frame.src = url
-frame.style.display = "block"
-btn.style.display = "none"
+document.getElementById("pdfFrame").src = pdfUrl
 
 }
 
 </script>
 
 </body>
+
 </html>
