@@ -9,7 +9,8 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0077ff">
-<link rel="apple-touch-icon" href="icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
@@ -17,7 +18,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:sans-serif;
+font-family:'Inter',sans-serif;
 }
 
 body{
@@ -34,7 +35,7 @@ display:none;
 
 header{
 text-align:center;
-margin-bottom:24px;
+margin-bottom:25px;
 }
 
 header h1{
@@ -55,12 +56,12 @@ margin:auto;
 background:white;
 padding:20px;
 margin-bottom:25px;
-border-radius:6px;
+border-radius:8px;
 }
 
 .uploadArea{
 border:2px dashed #7bb7ff;
-padding:25px;
+padding:30px;
 background:#f7fbff;
 cursor:pointer;
 display:flex;
@@ -71,13 +72,9 @@ min-height:120px;
 text-align:center;
 }
 
-.uploadArea span{
-font-size:14px;
-}
-
 #fileName{
-font-size:13px;
 margin-top:6px;
+font-size:13px;
 color:#666;
 }
 
@@ -88,12 +85,18 @@ background:#0077ff;
 color:white;
 border:none;
 padding:8px 16px;
-border-radius:4px;
+border-radius:6px;
 cursor:pointer;
+font-size:14px;
 }
 
 button:hover{
 background:#005fd1;
+}
+
+.closeBtn{
+background:#ff4d4d;
+margin-top:10px;
 }
 
 /* TABLE */
@@ -134,7 +137,7 @@ border:1px solid #ccc;
 margin-bottom:12px;
 }
 
-/* POPUPS */
+/* POPUP */
 
 .popup{
 position:fixed;
@@ -146,17 +149,16 @@ background:rgba(0,0,0,.6);
 display:none;
 align-items:center;
 justify-content:center;
-padding:20px;
 z-index:999;
 }
 
 .popupContent{
 background:white;
 padding:20px;
+border-radius:8px;
 max-width:420px;
 width:100%;
 text-align:center;
-border-radius:6px;
 }
 
 .popupContent input,
@@ -165,26 +167,26 @@ width:100%;
 padding:10px;
 margin-top:10px;
 border:1px solid #ccc;
+border-radius:5px;
 }
 
-/* NOTIFICATIONS */
+/* NOTICE */
 
 .notice-card{
 background:white;
-padding:14px;
+padding:12px;
 margin-bottom:10px;
 border-radius:6px;
 }
 
 .notice-title{
 font-weight:500;
-margin-bottom:6px;
+margin-bottom:5px;
 }
 
 .notice-link{
 font-size:13px;
 color:#0077ff;
-text-decoration:none;
 }
 
 </style>
@@ -192,8 +194,6 @@ text-decoration:none;
 </head>
 
 <body>
-
-<button id="installBtn" style="display:none">Install App</button>
 
 <header>
 <h1>B.Ed Vault</h1>
@@ -206,10 +206,8 @@ text-decoration:none;
 <h3>Upload .bed File to Decrypt</h3>
 
 <label class="uploadArea" onclick="bedFile.click()">
-
-<span>Upload .bed file</span>
+Upload .bed file
 <div id="fileName">No file selected</div>
-
 </label>
 
 <input type="file" id="bedFile" accept=".bed">
@@ -256,12 +254,13 @@ text-decoration:none;
 <p>UPI: yourupi@upi</p>
 
 <button onclick="showForm()">Proceed</button>
+<button class="closeBtn" onclick="closePopup('activationPopup')">Exit</button>
 
 </div>
 
 </div>
 
-<!-- USER FORM -->
+<!-- FORM POPUP -->
 
 <div class="popup" id="formPopup">
 
@@ -288,7 +287,10 @@ text-decoration:none;
 
 <input id="deviceId" readonly>
 
-<button onclick="sendWhatsapp()">Send</button>
+<br>
+
+<button onclick="sendWhatsapp()">Send WhatsApp</button>
+<button class="closeBtn" onclick="closePopup('formPopup')">Exit</button>
 
 </div>
 
@@ -298,10 +300,8 @@ text-decoration:none;
 
 /* ACTIVATED DEVICES */
 
-const activatedDevices = {
-
-"DEV-vfyd6p4ci": true
-
+const activatedDevices={
+"DEV-demo123":true
 }
 
 /* FILE NAME */
@@ -331,27 +331,15 @@ return id
 /* TABLE DATA */
 
 const tamilData={
-books:[
-["BED_BOOK_T1","Dr Kumar","#"]
-],
-pyq:[
-["BED_PYQ_T1","University","#"]
-],
-imp:[
-["BED_IMP_T1","Faculty","#"]
-]
+books:[["BED_BOOK_T1","Dr Kumar","#"]],
+pyq:[["BED_PYQ_T1","University","#"]],
+imp:[["BED_IMP_T1","Faculty","#"]]
 }
 
 const englishData={
-books:[
-["BED_BOOK_E1","Dr John","#"]
-],
-pyq:[
-["BED_PYQ_E1","University","#"]
-],
-imp:[
-["BED_IMP_E1","Faculty","#"]
-]
+books:[["BED_BOOK_E1","Dr John","#"]],
+pyq:[["BED_PYQ_E1","University","#"]],
+imp:[["BED_IMP_E1","Faculty","#"]]
 }
 
 /* LOAD TABLE */
@@ -369,17 +357,16 @@ html+=`
 <div class="author">${x[1]}</div>
 </td>
 <td class="downloadCell">
-<a href="${x[2]}"><button>Download</button></a>
+<button>Download</button>
 </td>
-</tr>`
+</tr>
+`
 
 })
 
 document.getElementById(id).innerHTML=html
 
 }
-
-/* MEDIUM */
 
 function changeMedium(){
 
@@ -395,7 +382,7 @@ loadTable("impTable",data.imp)
 
 changeMedium()
 
-/* POPUPS */
+/* POPUP CONTROL */
 
 function showForm(){
 
@@ -406,22 +393,24 @@ deviceId.value=getDeviceId()
 
 }
 
+function closePopup(id){
+document.getElementById(id).style.display="none"
+}
+
 /* WHATSAPP */
 
 function sendWhatsapp(){
 
-let name=name.value
-let age=age.value
-let gender=gender.value
-let phone=phone.value
-let promo=promo.value
-let device=deviceId.value
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let gender=document.getElementById("gender").value
+let phone=document.getElementById("phone").value
+let promo=document.getElementById("promo").value
+let device=document.getElementById("deviceId").value
 
 if(!name||!age||!gender||!phone||!promo){
-
 alert("Fill all details")
 return
-
 }
 
 let msg=`Name:${name}
@@ -433,7 +422,9 @@ Device:${device}
 
 I paid. Please activate.`
 
-window.open(`https://wa.me/919655969516?text=${encodeURIComponent(msg)}`)
+let url="https://wa.me/919655969516?text="+encodeURIComponent(msg)
+
+window.open(url,"_blank")
 
 }
 
@@ -444,21 +435,15 @@ async function decryptFile(){
 let file=bedFile.files[0]
 
 if(!file){
-
 alert("Upload .bed file")
-
 return
-
 }
 
 let device=getDeviceId()
 
 if(!activatedDevices[device]){
-
 activationPopup.style.display="flex"
-
 return
-
 }
 
 const buffer=await file.arrayBuffer()
@@ -473,7 +458,7 @@ const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv
 
 const blob=new Blob([decrypted],{type:"application/pdf"})
 
-window.open(URL.createObjectURL(blob))
+window.open("viewer.html?file="+pdfUrl)
 
 }
 
@@ -481,7 +466,7 @@ window.open(URL.createObjectURL(blob))
 
 async function loadNotifications(){
 
-if(!navigator.onLine)return
+if(!navigator.onLine) return
 
 const list=document.getElementById("list")
 
@@ -525,28 +510,6 @@ list.appendChild(div)
 }
 
 loadNotifications()
-
-/* PWA INSTALL */
-
-let deferredPrompt
-
-window.addEventListener("beforeinstallprompt",(e)=>{
-
-e.preventDefault()
-
-deferredPrompt=e
-
-installBtn.style.display="block"
-
-})
-
-installBtn.onclick=async()=>{
-
-installBtn.style.display="none"
-
-deferredPrompt.prompt()
-
-}
 
 </script>
 
