@@ -1,11 +1,14 @@
 {
   "name": "B.Ed Vault",
   "short_name": "BEd Vault",
-  "start_url": "./",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#0077ff",
-  "orientation": "portrait",
+  "description": "B.Ed Books, Notes, Question Papers and Materials",
+
   "icons": [
     {
       "src": "icon-192.png",
