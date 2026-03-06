@@ -2,12 +2,19 @@
 
 
 
+<head>
+  <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#0077ff">
+
+<link rel="apple-touch-icon" href="icon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+
+</head>
 
 
 
 
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap" rel="stylesheet" />
 
 <style>
 
@@ -209,8 +216,40 @@ font-size:24px;
 
 
 
+<button id="installBtn" style="display:none;">Install App</button>
+<script>
 
+let deferredPrompt;
 
+window.addEventListener("beforeinstallprompt", (e)=>{
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+document.getElementById("installBtn").style.display="block";
+
+});
+
+installBtn.addEventListener("click", async()=>{
+
+installBtn.style.display="none";
+
+deferredPrompt.prompt();
+
+const choice = await deferredPrompt.userChoice;
+
+if(choice.outcome === "accepted"){
+
+console.log("App Installed");
+
+}
+
+deferredPrompt = null;
+
+});
+
+</script>
 <header>
 <h1>B.Ed Vault</h1>
 </header>
@@ -606,5 +645,18 @@ loadNotifications()
 
 </script>
 
+<script>
 
+if("serviceWorker" in navigator){
+
+window.addEventListener("load", ()=>{
+
+navigator.serviceWorker.register("service-worker.js")
+.then(()=>console.log("PWA Ready"));
+
+});
+
+}
+
+</script>
 </html>
