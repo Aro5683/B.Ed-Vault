@@ -1,20 +1,15 @@
-< html>
-
-
-
+<!DOCTYPE html>
+<html>
 <head>
-  <link rel="manifest" href="manifest.json">
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>B.Ed Vault</title>
+
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0077ff">
-
 <link rel="apple-touch-icon" href="icon-192.png">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap" rel="stylesheet" />
-
-</head>
-
-
-
-
 
 <style>
 
@@ -22,17 +17,17 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-#bedFile{
-display:none;
+font-family:sans-serif;
 }
 
 body{
 background:#eef2f7;
 padding:20px;
 color:#222;
+}
+
+#bedFile{
+display:none;
 }
 
 /* HEADER */
@@ -44,9 +39,7 @@ margin-bottom:24px;
 
 header h1{
 font-size:32px;
-background:linear-gradient(90deg,#0077ff,#00c6ff);
--webkit-background-clip:text;
-color:transparent;
+color:#0077ff;
 }
 
 /* CONTAINER */
@@ -62,6 +55,7 @@ margin:auto;
 background:white;
 padding:20px;
 margin-bottom:25px;
+border-radius:6px;
 }
 
 .uploadArea{
@@ -69,26 +63,24 @@ border:2px dashed #7bb7ff;
 padding:25px;
 background:#f7fbff;
 cursor:pointer;
-
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-
 min-height:120px;
 text-align:center;
 }
 
 .uploadArea span{
 font-size:14px;
-color:#444;
 }
 
 #fileName{
 font-size:13px;
-color:#666;
 margin-top:6px;
+color:#666;
 }
+
 /* BUTTON */
 
 button{
@@ -106,14 +98,10 @@ background:#005fd1;
 
 /* TABLE */
 
-.tableWrap{
-width:100%;
-}
-
 table{
 width:100%;
 border-collapse:collapse;
-table-layout:fixed;
+margin-bottom:20px;
 }
 
 tr{
@@ -121,9 +109,7 @@ border-bottom:1px solid #ddd;
 }
 
 td{
-padding:12px 8px;
-vertical-align:middle;
-word-wrap:break-word;
+padding:12px;
 }
 
 .fileName{
@@ -133,12 +119,10 @@ font-weight:600;
 .author{
 font-size:13px;
 color:#666;
-margin-top:2px;
 }
 
 .downloadCell{
 text-align:right;
-width:110px;
 }
 
 /* SELECT */
@@ -169,9 +153,10 @@ z-index:999;
 .popupContent{
 background:white;
 padding:20px;
-width:100%;
 max-width:420px;
+width:100%;
 text-align:center;
+border-radius:6px;
 }
 
 .popupContent input,
@@ -188,7 +173,7 @@ border:1px solid #ccc;
 background:white;
 padding:14px;
 margin-bottom:10px;
-border-bottom:1px solid #ddd;
+border-radius:6px;
 }
 
 .notice-title{
@@ -202,61 +187,19 @@ color:#0077ff;
 text-decoration:none;
 }
 
-/* MOBILE */
-
-@media(max-width:600px){
-
-header h1{
-font-size:24px;
-}
-
-}
-
 </style>
 
+</head>
 
+<body>
 
-<button id="installBtn" style="display:none;">Install App</button>
-<script>
+<button id="installBtn" style="display:none">Install App</button>
 
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", (e)=>{
-
-e.preventDefault();
-
-deferredPrompt = e;
-
-document.getElementById("installBtn").style.display="block";
-
-});
-
-installBtn.addEventListener("click", async()=>{
-
-installBtn.style.display="none";
-
-deferredPrompt.prompt();
-
-const choice = await deferredPrompt.userChoice;
-
-if(choice.outcome === "accepted"){
-
-console.log("App Installed");
-
-}
-
-deferredPrompt = null;
-
-});
-
-</script>
 <header>
 <h1>B.Ed Vault</h1>
 </header>
 
 <div class="container">
-
-<!-- UPLOAD -->
 
 <div class="uploadBox">
 
@@ -269,43 +212,29 @@ deferredPrompt = null;
 
 </label>
 
-<input type="file" id="bedFile" accept=".bed" />
+<input type="file" id="bedFile" accept=".bed">
 
-<br />
+<br>
 
 <button onclick="decryptFile()">Decrypt File</button>
 
 </div>
-<!-- SEMESTER -->
 
 <h3>First Semester</h3>
 
 <select id="mediumSelect" onchange="changeMedium()">
-<option value="tamil" />Tamil Medium
-<option value="english" />English Medium
+<option value="tamil">Tamil Medium</option>
+<option value="english">English Medium</option>
 </select>
 
 <h4>Books</h4>
-
-<div class="tableWrap">
 <table id="booksTable"></table>
-</div>
 
 <h4>Previous Year Questions</h4>
-
-<div class="tableWrap">
 <table id="pyqTable"></table>
-</div>
 
 <h4>Important Questions</h4>
-
-<div class="tableWrap">
 <table id="impTable"></table>
-</div>
-
-<br /><br />
-
-<!-- NOTIFICATIONS -->
 
 <h3>TNTEU Notifications</h3>
 <div id="list"></div>
@@ -332,7 +261,7 @@ deferredPrompt = null;
 
 </div>
 
-<!-- FORM -->
+<!-- USER FORM -->
 
 <div class="popup" id="formPopup">
 
@@ -340,42 +269,26 @@ deferredPrompt = null;
 
 <h3>User Details</h3>
 
-<input id="name" placeholder="Name" required />
-<input id="age" placeholder="Age" required />
+<input id="name" placeholder="Name">
+<input id="age" placeholder="Age">
 
-<select id="gender" required>
-<option value="" />Gender
-<option />Male
-<option />Female
+<select id="gender">
+<option value="">Gender</option>
+<option>Male</option>
+<option>Female</option>
 </select>
 
-<input id="phone" placeholder="Phone Number" required />
+<input id="phone" placeholder="Phone Number">
 
-<select id="promo" required>
-<option value="" />Allow promotional messages
-<option />Agree
-<option />Disagree
+<select id="promo">
+<option value="">Allow promotional messages</option>
+<option>Agree</option>
+<option>Disagree</option>
 </select>
 
-<input id="deviceId" readonly />
+<input id="deviceId" readonly>
 
-<button onclick="handleSend()">Send</button>
-
-</div>
-
-</div>
-
-<!-- INSTALL -->
-
-<div class="popup" id="installPopup">
-
-<div class="popupContent">
-
-<h3>Add to Home Screen</h3>
-
-<p>Please add this site to home screen before continuing.</p>
-
-<button onclick="confirmInstall()">OK</button>
+<button onclick="sendWhatsapp()">Send</button>
 
 </div>
 
@@ -383,7 +296,15 @@ deferredPrompt = null;
 
 <script>
 
-/* FILE NAME DISPLAY */
+/* ACTIVATED DEVICES */
+
+const activatedDevices = {
+
+"DEV-demo123": true
+
+}
+
+/* FILE NAME */
 
 bedFile.onchange=function(){
 fileName.innerText=this.files[0].name
@@ -396,41 +317,44 @@ function getDeviceId(){
 let id=localStorage.getItem("device_id")
 
 if(!id){
+
 id="DEV-"+Math.random().toString(36).substr(2,9)
+
 localStorage.setItem("device_id",id)
+
 }
 
 return id
 
 }
 
-/* DOWNLOAD DATA (PUT YOUR LINKS HERE) */
+/* TABLE DATA */
 
 const tamilData={
 books:[
-["BED_BOOK_T1","Dr Kumar","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_book1.bed"]
+["BED_BOOK_T1","Dr Kumar","#"]
 ],
 pyq:[
-["BED_PYQ_T1","University","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_pyq1.bed"]
+["BED_PYQ_T1","University","#"]
 ],
 imp:[
-["BED_IMP_T1","Faculty","https://raw.githubusercontent.com/USERNAME/repo/main/tamil_imp1.bed"]
+["BED_IMP_T1","Faculty","#"]
 ]
 }
 
 const englishData={
 books:[
-["BED_BOOK_E1","Dr John","https://raw.githubusercontent.com/USERNAME/repo/main/english_book1.bed"]
+["BED_BOOK_E1","Dr John","#"]
 ],
 pyq:[
-["BED_PYQ_E1","University","https://raw.githubusercontent.com/USERNAME/repo/main/english_pyq1.bed"]
+["BED_PYQ_E1","University","#"]
 ],
 imp:[
-["BED_IMP_E1","Faculty","https://raw.githubusercontent.com/USERNAME/repo/main/english_imp1.bed"]
+["BED_IMP_E1","Faculty","#"]
 ]
 }
 
-/* TABLE LOADER */
+/* LOAD TABLE */
 
 function loadTable(id,data){
 
@@ -440,22 +364,13 @@ data.forEach(x=>{
 
 html+=`
 <tr>
-
 <td>
-
 <div class="fileName">${x[0]}</div>
 <div class="author">${x[1]}</div>
-
 </td>
-
 <td class="downloadCell">
-
-<a href="${x[2]}" download>
-<button>Download</button>
-</a>
-
+<a href="${x[2]}"><button>Download</button></a>
 </td>
-
 </tr>`
 
 })
@@ -464,11 +379,12 @@ document.getElementById(id).innerHTML=html
 
 }
 
-/* MEDIUM SWITCH */
+/* MEDIUM */
 
 function changeMedium(){
 
 let medium=mediumSelect.value
+
 let data=medium==="tamil"?tamilData:englishData
 
 loadTable("booksTable",data.books)
@@ -490,27 +406,7 @@ deviceId.value=getDeviceId()
 
 }
 
-let installConfirmed=false
-
-function handleSend(){
-
-if(!installConfirmed){
-installPopup.style.display="flex"
-return
-}
-
-sendWhatsapp()
-
-}
-
-function confirmInstall(){
-
-installPopup.style.display="none"
-installConfirmed=true
-
-}
-
-/* WHATSAPP MESSAGE */
+/* WHATSAPP */
 
 function sendWhatsapp(){
 
@@ -522,8 +418,10 @@ let promo=promo.value
 let device=deviceId.value
 
 if(!name||!age||!gender||!phone||!promo){
+
 alert("Fill all details")
 return
+
 }
 
 let msg=`Name:${name}
@@ -546,31 +444,19 @@ async function decryptFile(){
 let file=bedFile.files[0]
 
 if(!file){
+
 alert("Upload .bed file")
+
 return
+
 }
 
 let device=getDeviceId()
 
-let data=JSON.parse(localStorage.getItem("devices")||"{}")
-
-if(Object.keys(data).length===0){
-
-try{
-
-let res=await fetch("https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/refs/heads/main/devices.json")
-
-data=await res.json()
-
-localStorage.setItem("devices",JSON.stringify(data))
-
-}catch{}
-
-}
-
-if(!data[device]){
+if(!activatedDevices[device]){
 
 activationPopup.style.display="flex"
+
 return
 
 }
@@ -591,9 +477,11 @@ window.open(URL.createObjectURL(blob))
 
 }
 
-/* TNTEU NOTIFICATIONS */
+/* NOTIFICATIONS */
 
 async function loadNotifications(){
+
+if(!navigator.onLine)return
 
 const list=document.getElementById("list")
 
@@ -615,48 +503,52 @@ wrappers.forEach(w=>{
 w.querySelectorAll("a").forEach(a=>links.push(a))
 })
 
-list.innerHTML=""
-
-for(let i=0;i<Math.min(links.length,70);i++){
+for(let i=0;i<Math.min(links.length,20);i++){
 
 let url="https://www.tnteu.ac.in/"+links[i].getAttribute("href")
 
 let div=document.createElement("div")
+
 div.className="notice-card"
 
 div.innerHTML=`
 <div class="notice-title">${links[i].innerText}</div>
-<a class="notice-link" href="${url}" target="_blank">Open Notification →</a>
+<a class="notice-link" href="${url}" target="_blank">Open Notification</a>
 `
 
 list.appendChild(div)
 
 }
 
-}catch{
-
-list.innerHTML="<div class='notice-card'>Unable to load notifications</div>"
-
-}
+}catch{}
 
 }
 
 loadNotifications()
 
-</script>
+/* PWA INSTALL */
 
-<script>
+let deferredPrompt
 
-if("serviceWorker" in navigator){
+window.addEventListener("beforeinstallprompt",(e)=>{
 
-window.addEventListener("load", ()=>{
+e.preventDefault()
 
-navigator.serviceWorker.register("service-worker.js")
-.then(()=>console.log("PWA Ready"));
+deferredPrompt=e
 
-});
+installBtn.style.display="block"
+
+})
+
+installBtn.onclick=async()=>{
+
+installBtn.style.display="none"
+
+deferredPrompt.prompt()
 
 }
 
 </script>
+
+</body>
 </html>
