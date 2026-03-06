@@ -457,12 +457,15 @@ const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["d
 
 const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
 
-const blob=new Blob([decrypted],{type:"application/pdf"})
+const blob = new Blob([decrypted],{type:"application/pdf"})
 
 const pdfUrl = URL.createObjectURL(blob)
 
-window.open("viewer.html?file="+encodeURIComponent(pdfUrl),"_blank")
-}
+/* store temporarily */
+localStorage.setItem("tempPDF", pdfUrl)
+
+/* open viewer */
+window.open("viewer.html","_blank")
 
 /* NOTIFICATIONS */
 
