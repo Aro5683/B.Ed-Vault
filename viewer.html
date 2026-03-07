@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -31,20 +32,23 @@ background:white;
 
 <script>
 
-let url = sessionStorage.getItem("pdfURL")
+const params = new URLSearchParams(window.location.search)
 
-if(url){
+const file = params.get("file")
 
-document.getElementById("pdfFrame").src = url
+if(file){
+
+document.getElementById("pdfFrame").src = decodeURIComponent(file)
 
 }else{
 
 document.body.innerHTML =
-"<h2 style='color:white;text-align:center;margin-top:40px'>PDF not found</h2>"
+"<h2 style='color:white;text-align:center;margin-top:40px'>No PDF Loaded</h2>"
 
 }
 
 </script>
 
 </body>
+
 </html>
