@@ -1,109 +1,530 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>B.Ed Vault</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<meta name="theme-color" content="#0a6cff">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:#eef2f7;padding:20px;color:#222}
-#bedFile{display:none}
 
-header{text-align:center;margin-bottom:25px}
-header h1{font-size:32px;color:#0077ff}
+/* GLOBAL */
 
-.container{max-width:900px;margin:auto}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-.uploadBox{
+body{
+background:linear-gradient(180deg,#f4f9ff,#eaf2ff);
+color:#333;
+padding-bottom:70px;
+}
+
+/* HEADER */
+
+header{
+background:#0a6cff;
+color:white;
+padding:16px;
+text-align:center;
+font-size:20px;
+font-weight:600;
+box-shadow:0 6px 25px rgba(0,0,0,0.15);
+}
+
+/* SECTIONS */
+
+.section{
+padding:18px;
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* CARD */
+
+.card{
 background:white;
 padding:20px;
-border-radius:8px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 8px 30px rgba(0,0,0,0.08);
 }
+
+/* UPLOAD */
 
 .uploadArea{
 border:2px dashed #7bb7ff;
-padding:40px;
-background:#f7fbff;
+padding:35px;
+border-radius:12px;
+text-align:center;
 cursor:pointer;
+background:#f7fbff;
+}
+
+#bedFile{
+display:none;
+}
+
+#fileName{
+font-size:13px;
+margin-top:6px;
+color:#777;
+}
+
+/* BUTTON */
+
+button{
+background:#0a6cff;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+td:last-child{
+text-align:right;
+}
+
+/* SELECT */
+
+select{
+padding:8px;
+border-radius:8px;
+border:1px solid #ddd;
+margin-top:10px;
+}
+
+/* NOTIFICATIONS */
+
+.notice{
+background:white;
+padding:14px;
+border-radius:12px;
+margin-bottom:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.06);
+font-size:14px;
+}
+
+/* BOTTOM NAV */
+
+nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
 display:flex;
-flex-direction:column;
+justify-content:space-around;
+padding:10px 0;
+box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+}
+
+nav div{
+text-align:center;
+font-size:13px;
+cursor:pointer;
+color:#666;
+}
+
+nav div.active{
+color:#0a6cff;
+font-weight:600;
+}
+
+/* POPUP */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
 align-items:center;
 justify-content:center;
-min-height:140px;
+z-index:9999;
+}
+
+.popupBox{
+background:white;
+padding:25px;
+border-radius:14px;
+width:90%;
+max-width:420px;
 text-align:center;
 }
 
-#fileName{margin-top:6px;font-size:13px;color:#666}
-
-button{
-background:#0077ff;
-color:white;
-border:none;
-padding:10px 18px;
-border-radius:6px;
-cursor:pointer;
+.popupBox input,
+.popupBox select{
+width:100%;
+padding:10px;
 margin-top:10px;
+border:1px solid #ddd;
+border-radius:8px;
 }
-button:hover{background:#005fd1}
+
+/* PDF VIEWER */
+
+#pdfContainer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+overflow:auto;
+z-index:9999;
+}
+
+canvas{
+display:block;
+margin:auto;
+margin-bottom:12px;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>B.Ed Vault</h1>
-</header>
+<header>B.Ed Vault</header>
 
-<div class="container">
-<div class="uploadBox">
+<!-- BOOKS -->
 
-<h3>Upload .bed File to Decrypt</h3>
+<div id="books" class="section active">
+
+<div class="card">
+
+<h3>First Semester</h3>
+
+<select id="mediumSelect" onchange="loadMedium()">
+<option value="tamil">Tamil Medium</option>
+<option value="english">English Medium</option>
+</select>
+
+<h4 style="margin-top:15px">Books</h4>
+<table id="booksTable"></table>
+
+<h4 style="margin-top:15px">Important Questions</h4>
+<table id="impTable"></table>
+
+<h4 style="margin-top:15px">Previous Papers</h4>
+<table id="pyqTable"></table>
+
+</div>
+
+</div>
+
+<!-- DECRYPT -->
+
+<div id="decrypt" class="section">
+
+<div class="card">
+
+<h3>Decrypt .bed File</h3>
 
 <label class="uploadArea" onclick="bedFile.click()">
-Upload .bed file
+
+Upload encrypted .bed file
 <div id="fileName">No file selected</div>
+
 </label>
 
 <input type="file" id="bedFile" accept=".bed">
 
-<button onclick="decryptFile()">Decrypt File</button>
+<br><br>
+
+<button onclick="startDecrypt()">Decrypt</button>
 
 </div>
+
 </div>
+
+<!-- CIRCULARS -->
+
+<div id="circulars" class="section">
+
+<div class="card">
+
+<h3>TNTEU Notifications</h3>
+
+<div id="noticeList"></div>
+
+</div>
+
+</div>
+
+<!-- POPUP -->
+
+<div id="subPopup" class="popup">
+
+<div class="popupBox">
+
+<h2>B.Ed Vault Subscription</h2>
+
+<p>Access B.Ed Books, Notes and Circulars.</p>
+
+<h2 style="color:#0a6cff">₹149</h2>
+
+<p>UPI: yourupi@upi</p>
+
+<button onclick="openForm()">Proceed</button>
+<br><br>
+<button onclick="closePopup()">Close</button>
+
+</div>
+
+</div>
+
+<!-- DETAILS -->
+
+<div id="formPopup" class="popup">
+
+<div class="popupBox">
+
+<h3>Your Details</h3>
+
+<input id="nameInput" placeholder="Name">
+
+<input id="ageInput" placeholder="Age">
+
+<select id="genderInput">
+<option value="">Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<input id="deviceId" readonly>
+
+<button onclick="sendWhatsapp()">Send</button>
+
+</div>
+
+</div>
+
+<!-- PDF VIEWER -->
+
+<div id="pdfContainer">
+<div id="pdfViewer"></div>
+</div>
+
+<!-- NAV -->
+
+<nav>
+
+<div onclick="showPage('books')" class="active">Books</div>
+<div onclick="showPage('decrypt')">Decrypt</div>
+<div onclick="showPage('circulars')">Circulars</div>
+
+</nav>
 
 <script>
 
-bedFile.onchange=function(){
-fileName.innerText=this.files[0].name
+/* NAVIGATION */
+
+function showPage(id){
+
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+
+document.querySelectorAll("nav div").forEach(n=>n.classList.remove("active"))
+event.target.classList.add("active")
+
 }
 
-function openDB(){
-return new Promise((resolve,reject)=>{
+/* DEVICE ID */
 
-const req=indexedDB.open("pdfDB",1)
+const activatedDevices=["DEV-demo123"]
 
-req.onupgradeneeded=e=>{
-const db=e.target.result
-if(!db.objectStoreNames.contains("files")){
-db.createObjectStore("files")
+function getDeviceId(){
+
+let id=localStorage.getItem("bed_id")
+
+if(!id){
+id="DEV-"+Math.random().toString(36).substr(2,9)
+localStorage.setItem("bed_id",id)
+}
+
+return id
+
+}
+
+function isActivated(){
+return activatedDevices.includes(getDeviceId())
+}
+
+/* POPUPS */
+
+function startDecrypt(){
+
+if(!isActivated()){
+subPopup.style.display="flex"
+return
+}
+
+decryptFile()
+
+}
+
+function openForm(){
+
+subPopup.style.display="none"
+formPopup.style.display="flex"
+
+deviceId.value=getDeviceId()
+
+}
+
+function closePopup(){
+subPopup.style.display="none"
+formPopup.style.display="none"
+}
+
+function sendWhatsapp(){
+
+let name=nameInput.value
+let age=ageInput.value
+let gender=genderInput.value
+let device=deviceId.value
+
+let msg=`Name:${name}
+Age:${age}
+Gender:${gender}
+Device:${device}
+
+Please activate.`
+
+window.open("https://wa.me/919655969516?text="+encodeURIComponent(msg))
+
+}
+
+/* TABLE DATA */
+
+const data={
+tamil:{
+books:[["Childhood & Growing Up","Dr Kumar","#"]],
+imp:[["Unit 1 Important","Faculty","#"]],
+pyq:[["2022 Question Paper","TNTEU","#"]]
+},
+english:{
+books:[["Childhood & Growing Up","Dr John","#"]],
+imp:[["Unit 1 Important","Faculty","#"]],
+pyq:[["2022 Question Paper","TNTEU","#"]]
 }
 }
 
-req.onsuccess=e=>resolve(e.target.result)
-req.onerror=e=>reject(e)
+function renderTable(id,list){
+
+let html=""
+
+list.forEach(x=>{
+
+html+=`
+<tr>
+<td>
+<b>${x[0]}</b><br>
+<span style="font-size:12px;color:#777">${x[1]}</span>
+</td>
+<td><button>Download</button></td>
+</tr>
+`
 
 })
+
+document.getElementById(id).innerHTML=html
+
 }
+
+function loadMedium(){
+
+let m=mediumSelect.value
+
+renderTable("booksTable",data[m].books)
+renderTable("impTable",data[m].imp)
+renderTable("pyqTable",data[m].pyq)
+
+}
+
+loadMedium()
+
+/* NOTIFICATIONS */
+
+async function loadNotifications(){
+
+if(!isActivated()) return
+
+const proxy="https://api.codetabs.com/v1/proxy/?quest="
+const target="https://www.tnteu.ac.in/notifications.php?nid=5"
+
+try{
+
+const res=await fetch(proxy+encodeURIComponent(target))
+const html=await res.text()
+
+const doc=new DOMParser().parseFromString(html,"text/html")
+
+const links=doc.querySelectorAll(".sectionWrapper a")
+
+links.forEach((a,i)=>{
+
+if(i>8)return
+
+let div=document.createElement("div")
+div.className="notice"
+div.innerText=a.innerText
+
+noticeList.appendChild(div)
+
+})
+
+}catch{}
+
+}
+
+loadNotifications()
+
+/* FAST PDF VIEWER */
+
+let pdfDoc
 
 async function decryptFile(){
 
-const file=bedFile.files[0]
+let file=bedFile.files[0]
 
-if(!file){
-alert("Upload .bed file")
-return
-}
+if(!file) return alert("Upload file")
+
+pdfContainer.style.display="block"
 
 const buffer=await file.arrayBuffer()
 
@@ -111,32 +532,55 @@ const iv=buffer.slice(0,12)
 const keyData=buffer.slice(12,44)
 const encrypted=buffer.slice(44)
 
-const key=await crypto.subtle.importKey(
-"raw",
-keyData,
-{name:"AES-GCM"},
-false,
-["decrypt"]
-)
+const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["decrypt"])
 
-const decrypted=await crypto.subtle.decrypt(
-{name:"AES-GCM",iv:new Uint8Array(iv)},
-key,
-encrypted
-)
+const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
 
-const blob=new Blob([decrypted],{type:"application/pdf"})
+const pdfData=new Uint8Array(decrypted)
 
-const db=await openDB()
+const loadingTask=pdfjsLib.getDocument({data:pdfData})
 
-const tx=db.transaction("files","readwrite")
-const store=tx.objectStore("files")
+pdfDoc=await loadingTask.promise
 
-store.put(blob,"pdf")
+renderPage(1)
 
-tx.oncomplete=function(){
-window.location.href="viewer.html"
 }
+
+/* Lazy render for speed */
+
+async function renderPage(num){
+
+const page=await pdfDoc.getPage(num)
+
+const viewport=page.getViewport({scale:1.2})
+
+const canvas=document.createElement("canvas")
+const ctx=canvas.getContext("2d")
+
+canvas.height=viewport.height
+canvas.width=viewport.width
+
+pdfViewer.appendChild(canvas)
+
+await page.render({canvasContext:ctx,viewport}).promise
+
+if(num<pdfDoc.numPages){
+renderPage(num+1)
+}
+
+}
+
+/* PWA */
+
+if("serviceWorker" in navigator){
+
+let sw=`
+self.addEventListener('install',e=>self.skipWaiting());
+self.addEventListener('fetch',e=>{});
+`
+
+let blob=new Blob([sw],{type:'text/javascript'})
+navigator.serviceWorker.register(URL.createObjectURL(blob))
 
 }
 
