@@ -156,13 +156,9 @@ const blob = new Blob([decrypted],{type:"application/pdf"})
 
 const url = URL.createObjectURL(blob)
 
-/* store temporary url */
+/* open viewer and pass url */
 
-sessionStorage.setItem("pdfURL",url)
-
-/* open viewer */
-
-window.location.href="viewer.html"
+window.location.href = "viewer.html?file=" + encodeURIComponent(url)
 
   }
 </script>
