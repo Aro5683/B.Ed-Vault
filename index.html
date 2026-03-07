@@ -150,27 +150,21 @@ key,
 encrypted
 )
 
-/* Convert to Blob */
+/* create blob */
 
 const blob = new Blob([decrypted],{type:"application/pdf"})
 
-/* Use FileReader to get Base64 */
+const url = URL.createObjectURL(blob)
 
-const reader = new FileReader()
+/* store temporary url */
 
-reader.onload = function(){
+sessionStorage.setItem("pdfURL",url)
 
-let base64 = reader.result.split(",")[1]
-
-sessionStorage.setItem("pdfData",base64)
+/* open viewer */
 
 window.location.href="viewer.html"
 
-}
-
-reader.readAsDataURL(blob)
-
-}
+  }
 </script>
 
 </body>
