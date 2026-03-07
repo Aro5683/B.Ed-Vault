@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+
+<title>Decrypt</title>
+
+<style>
+
+body{
+font-family:Poppins;
+background:#eef4ff;
+padding:30px;
+}
+
+.upload{
+border:2px dashed #7bb7ff;
+padding:40px;
+text-align:center;
+background:white;
+border-radius:12px;
+}
+
+button{
+background:#0a6cff;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Decrypt .bed File</h2>
+
+<div class="upload">
+
+<input type="file" id="bedFile" accept=".bed">
+
+<br><br>
+
+<button onclick="decryptFile()">Decrypt</button>
+
+</div>
+
+<script>
+
+async function decryptFile(){
+
+let file=document.getElementById("bedFile").files[0]
+
+if(!file)return
+
+const buffer=await file.arrayBuffer()
+
+const iv=buffer.slice(0,12)
+const keyData=buffer.slice(12,44)
+const encrypted=buffer.slice(44)
+
+const key=await crypto.subtle.importKey(
+"raw",
+keyData,
+{name:"AES-GCM"},
+false,
+["decrypt"]
+)
+
+const decrypted=await crypto.subtle.decrypt(
+{name:"AES-GCM",iv:new Uint8Array(iv)},
+key,
+encrypted
+)
+
+let blob=new Blob([decrypted],{type:"application/pdf"})
+
+let url=URL.createObjectURL(blob)
+
+localStorage.setItem("pdfURL",url)
+
+location.href="viewer.html"
+
+}
+
+</script>
+
+</body>
+</html>
