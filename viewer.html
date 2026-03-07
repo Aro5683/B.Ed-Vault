@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
@@ -31,18 +30,17 @@ border:none;
 
 <script>
 
-let base64 = sessionStorage.getItem("pdfData")
+let base64=sessionStorage.getItem("pdfData")
 
 if(base64){
 
-let pdfUrl = "data:application/pdf;base64," + base64
+let pdfUrl="data:application/pdf;base64,"+base64
 
-document.getElementById("pdfFrame").src = pdfUrl
+document.getElementById("pdfFrame").src=pdfUrl
 
 }
 
 </script>
 
 </body>
-
 </html>
