@@ -9,24 +9,18 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
 <style>
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+font-family:Poppins;
 }
 
 body{
-background:linear-gradient(180deg,#f4f9ff,#eaf2ff);
-color:#333;
-padding-bottom:70px;
+background:#eef4ff;
 }
-
-/* HEADER */
 
 header{
 background:#0a6cff;
@@ -35,52 +29,21 @@ padding:16px;
 text-align:center;
 font-size:20px;
 font-weight:600;
-box-shadow:0 6px 25px rgba(0,0,0,0.15);
 }
 
-/* SECTION */
-
-.section{
-display:none;
+.container{
 padding:18px;
+max-width:900px;
+margin:auto;
 }
-
-.section.active{
-display:block;
-}
-
-/* CARD */
 
 .card{
 background:white;
 padding:20px;
-border-radius:16px;
+border-radius:14px;
 margin-bottom:20px;
 box-shadow:0 8px 30px rgba(0,0,0,0.08);
 }
-
-/* UPLOAD */
-
-.uploadArea{
-border:2px dashed #7bb7ff;
-padding:35px;
-border-radius:12px;
-text-align:center;
-cursor:pointer;
-background:#f7fbff;
-}
-
-#bedFile{
-display:none;
-}
-
-#fileName{
-font-size:13px;
-margin-top:6px;
-color:#777;
-}
-
-/* BUTTON */
 
 button{
 background:#0a6cff;
@@ -89,53 +52,14 @@ border:none;
 padding:10px 16px;
 border-radius:8px;
 cursor:pointer;
-font-weight:500;
 }
 
-/* TABLE */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-td{
-padding:14px;
-border-bottom:1px solid #eee;
-}
-
-td:last-child{
-text-align:right;
-}
-
-/* NAV */
-
-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
+.notice{
 background:white;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
 }
-
-nav div{
-text-align:center;
-font-size:13px;
-cursor:pointer;
-color:#666;
-}
-
-nav div.active{
-color:#0a6cff;
-font-weight:600;
-}
-
-/* POPUP */
 
 .popup{
 position:fixed;
@@ -147,7 +71,6 @@ background:rgba(0,0,0,0.6);
 display:none;
 align-items:center;
 justify-content:center;
-z-index:9999;
 }
 
 .popupBox{
@@ -155,7 +78,7 @@ background:white;
 padding:25px;
 border-radius:14px;
 width:90%;
-max-width:420px;
+max-width:400px;
 text-align:center;
 }
 
@@ -168,87 +91,22 @@ border:1px solid #ddd;
 border-radius:8px;
 }
 
-/* PDF VIEWER */
-
-#pdfContainer{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-z-index:10000;
-overflow:auto;
-}
-
-canvas{
-display:block;
-margin:auto;
-margin-bottom:12px;
-}
-
 </style>
 </head>
 
 <body>
 
-<header id="header">B.Ed Vault</header>
+<header>B.Ed Vault</header>
 
-<!-- BOOKS -->
-
-<div id="books" class="section active">
+<div class="container">
 
 <div class="card">
 
-<h3>First Semester</h3>
+<h3>Decrypt PDF</h3>
 
-<select id="mediumSelect" onchange="loadMedium()">
-<option value="tamil">Tamil Medium</option>
-<option value="english">English Medium</option>
-</select>
-
-<h4 style="margin-top:15px">Books</h4>
-<table id="booksTable"></table>
-
-<h4 style="margin-top:15px">Important Questions</h4>
-<table id="impTable"></table>
-
-<h4 style="margin-top:15px">Previous Papers</h4>
-<table id="pyqTable"></table>
+<button onclick="openDecrypt()">Open Decrypt Tool</button>
 
 </div>
-
-</div>
-
-<!-- DECRYPT -->
-
-<div id="decrypt" class="section">
-
-<div class="card">
-
-<h3>Decrypt .bed File</h3>
-
-<label class="uploadArea" onclick="bedFile.click()">
-
-Upload encrypted .bed file
-<div id="fileName">No file selected</div>
-
-</label>
-
-<input type="file" id="bedFile" accept=".bed">
-
-<br><br>
-
-<button onclick="startDecrypt()">Decrypt</button>
-
-</div>
-
-</div>
-
-<!-- CIRCULARS -->
-
-<div id="circulars" class="section">
 
 <div class="card">
 
@@ -268,27 +126,23 @@ Upload encrypted .bed file
 
 <h2>B.Ed Vault Access</h2>
 
-<p>Access B.Ed materials and circulars.</p>
+<p>Activate your device</p>
 
-<h2 style="color:#0a6cff">₹149</h2>
-
-<p>UPI: yourupi@upi</p>
+<h3>₹149</h3>
 
 <button onclick="openForm()">Proceed</button>
-<br><br>
-<button onclick="closePopup()">Close</button>
 
 </div>
 
 </div>
 
-<!-- FORM POPUP -->
+<!-- FORM -->
 
 <div id="formPopup" class="popup">
 
 <div class="popupBox">
 
-<h3>Enter Your Details</h3>
+<h3>Enter Details</h3>
 
 <input id="nameInput" placeholder="Name">
 <input id="ageInput" placeholder="Age">
@@ -299,100 +153,52 @@ Upload encrypted .bed file
 <option>Female</option>
 </select>
 
-<select id="agreeInput">
-<option value="">Allow WhatsApp group add?</option>
-<option>Agree</option>
-<option>Disagree</option>
-</select>
-
 <input id="deviceId" readonly>
 
 <button onclick="sendWhatsapp()">Send</button>
-<br><br>
-<button onclick="closePopup()">Cancel</button>
 
 </div>
 
 </div>
-
-<!-- ERROR POPUP -->
-
-<div id="errorPopup" class="popup">
-
-<div class="popupBox">
-
-<h3>Incomplete Details</h3>
-<p>Please fill all fields before sending.</p>
-
-<button onclick="closeError()">OK</button>
-
-</div>
-
-</div>
-
-<!-- PDF VIEWER -->
-
-<div id="pdfContainer">
-<div id="pdfViewer"></div>
-</div>
-
-<!-- NAV -->
-
-<nav>
-
-<div onclick="showPage('books')" class="active">Books</div>
-<div onclick="showPage('decrypt')">Decrypt</div>
-<div onclick="showPage('circulars')">Circulars</div>
-
-</nav>
 
 <script>
 
-/* NAVIGATION */
+/* ACTIVATED DEVICE LIST */
 
-function showPage(id){
-
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"))
-document.getElementById(id).classList.add("active")
-
-document.querySelectorAll("nav div").forEach(n=>n.classList.remove("active"))
-event.target.classList.add("active")
-
-}
-
-/* DEVICE ID */
-
-const activatedDevices=["DEV-demo123"]
+const activatedDevices=[
+"DEV-demo123"
+]
 
 function getDeviceId(){
 
 let id=localStorage.getItem("bed_id")
 
 if(!id){
+
 id="DEV-"+Math.random().toString(36).substr(2,9)
+
 localStorage.setItem("bed_id",id)
+
 }
 
 return id
 
 }
 
-function isActivated(){
-return activatedDevices.includes(getDeviceId())
-}
+/* OPEN DECRYPT */
 
-/* POPUPS */
+function openDecrypt(){
 
-function startDecrypt(){
-
-if(!isActivated()){
+if(!activatedDevices.includes(getDeviceId())){
 subPopup.style.display="flex"
 return
 }
 
-decryptFile()
+location.href="decrypt.html"
 
 }
+
+/* FORM */
 
 function openForm(){
 
@@ -403,15 +209,6 @@ deviceId.value=getDeviceId()
 
 }
 
-function closePopup(){
-subPopup.style.display="none"
-formPopup.style.display="none"
-}
-
-function closeError(){
-errorPopup.style.display="none"
-}
-
 /* WHATSAPP */
 
 function sendWhatsapp(){
@@ -419,19 +216,13 @@ function sendWhatsapp(){
 let name=nameInput.value
 let age=ageInput.value
 let gender=genderInput.value
-let agree=agreeInput.value
-let device=deviceId.value
 
-if(!name || !age || !gender || !agree){
-errorPopup.style.display="flex"
-return
-}
+if(!name||!age||!gender)return
 
 let msg=`Name:${name}
 Age:${age}
 Gender:${gender}
-Agree:${agree}
-Device:${device}
+Device:${getDeviceId()}
 
 Please activate.`
 
@@ -439,102 +230,39 @@ window.open("https://wa.me/919655969516?text="+encodeURIComponent(msg))
 
 }
 
-/* TABLE DATA */
+/* NOTIFICATIONS */
 
-const data={
-tamil:{
-books:[["Childhood & Growing Up","Dr Kumar","#"]],
-imp:[["Unit 1 Important","Faculty","#"]],
-pyq:[["2022 Question Paper","TNTEU","#"]]
-},
-english:{
-books:[["Childhood & Growing Up","Dr John","#"]],
-imp:[["Unit 1 Important","Faculty","#"]],
-pyq:[["2022 Question Paper","TNTEU","#"]]
-}
-}
+async function loadNotifications(){
 
-function renderTable(id,list){
+if(!activatedDevices.includes(getDeviceId())) return
 
-let html=""
+const proxy="https://api.codetabs.com/v1/proxy/?quest="
+const target="https://www.tnteu.ac.in/notifications.php?nid=5"
 
-list.forEach(x=>{
+const res=await fetch(proxy+encodeURIComponent(target))
+const html=await res.text()
 
-html+=`
-<tr>
-<td>
-<b>${x[0]}</b><br>
-<span style="font-size:12px;color:#777">${x[1]}</span>
-</td>
-<td><button>Download</button></td>
-</tr>
-`
+const doc=new DOMParser().parseFromString(html,"text/html")
+
+const links=doc.querySelectorAll(".sectionWrapper a")
+
+links.forEach((a,i)=>{
+
+if(i>8)return
+
+let div=document.createElement("div")
+
+div.className="notice"
+
+div.innerText=a.innerText
+
+noticeList.appendChild(div)
 
 })
 
-document.getElementById(id).innerHTML=html
-
 }
 
-function loadMedium(){
-
-let m=mediumSelect.value
-
-renderTable("booksTable",data[m].books)
-renderTable("impTable",data[m].imp)
-renderTable("pyqTable",data[m].pyq)
-
-}
-
-loadMedium()
-
-/* PDF VIEWER */
-
-async function decryptFile(){
-
-let file=bedFile.files[0]
-if(!file) return
-
-document.getElementById("header").style.display="none"
-document.querySelector("nav").style.display="none"
-document.querySelectorAll(".section").forEach(s=>s.style.display="none")
-
-pdfContainer.style.display="block"
-
-const buffer=await file.arrayBuffer()
-
-const iv=buffer.slice(0,12)
-const keyData=buffer.slice(12,44)
-const encrypted=buffer.slice(44)
-
-const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["decrypt"])
-
-const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
-
-const pdfData=new Uint8Array(decrypted)
-
-const loadingTask=pdfjsLib.getDocument({data:pdfData})
-const pdfDoc=await loadingTask.promise
-
-for(let i=1;i<=pdfDoc.numPages;i++){
-
-const page=await pdfDoc.getPage(i)
-
-const viewport=page.getViewport({scale:1.2})
-
-const canvas=document.createElement("canvas")
-const ctx=canvas.getContext("2d")
-
-canvas.height=viewport.height
-canvas.width=viewport.width
-
-pdfViewer.appendChild(canvas)
-
-await page.render({canvasContext:ctx,viewport}).promise
-
-}
-
-}
+loadNotifications()
 
 </script>
 
