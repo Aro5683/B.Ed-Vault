@@ -41,6 +41,8 @@ max-width:900px;
 margin:auto;
 }
 
+/* upload */
+
 .uploadBox{
 background:white;
 padding:20px;
@@ -80,6 +82,8 @@ button:hover{
 background:#005fd1;
 }
 
+/* tables */
+
 table{
 width:100%;
 border-collapse:collapse;
@@ -106,6 +110,8 @@ color:#666;
 .downloadCell{
 text-align:right;
 }
+
+/* popup */
 
 .popup{
 position:fixed;
@@ -166,23 +172,95 @@ Upload .bed file
 
 </div>
 
+<h3>First Semester</h3>
+
+<select id="mediumSelect" onchange="changeMedium()">
+<option value="tamil">Tamil Medium</option>
+<option value="english">English Medium</option>
+</select>
+
+<h4>Books</h4>
+<table id="booksTable"></table>
+
+<h4>Previous Year Questions</h4>
+<table id="pyqTable"></table>
+
+<h4>Important Questions</h4>
+<table id="impTable"></table>
+
+<h3>TNTEU Notifications</h3>
+<div id="list"></div>
+
+</div>
+
+<!-- activation popup -->
+
+<div class="popup" id="activationPopup">
+
+<div class="popupContent">
+
+<h3>Device Activation Required</h3>
+
+<p>Activate device to decrypt files</p>
+
+<b>₹149</b>
+
+<p>UPI: yourupi@upi</p>
+
+<button onclick="showForm()">Proceed</button>
+
+</div>
+
+</div>
+
+<!-- form popup -->
+
+<div class="popup" id="formPopup">
+
+<div class="popupContent">
+
+<h3>User Details</h3>
+
+<input id="name" placeholder="Name">
+<input id="age" placeholder="Age">
+
+<select id="gender">
+<option value="">Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<input id="phone" placeholder="Phone Number">
+
+<select id="promo">
+<option value="">Allow promotional messages</option>
+<option>Agree</option>
+<option>Disagree</option>
+</select>
+
+<input id="deviceId" readonly>
+
+<button onclick="sendWhatsapp()">Send</button>
+
+</div>
+
 </div>
 
 <script>
 
-/* ACTIVATED DEVICES */
+/* activated devices */
 
 const activatedDevices={
 "DEV-demo123":true
 }
 
-/* FILE NAME */
+/* filename */
 
 bedFile.onchange=function(){
 fileName.innerText=this.files[0].name
 }
 
-/* DEVICE ID */
+/* device id */
 
 function getDeviceId(){
 
@@ -200,27 +278,114 @@ return id
 
 }
 
-/* DECRYPT */
+/* tables */
+
+const tamilData={
+books:[["BED_BOOK_T1","Dr Kumar","#"]],
+pyq:[["BED_PYQ_T1","University","#"]],
+imp:[["BED_IMP_T1","Faculty","#"]]
+}
+
+const englishData={
+books:[["BED_BOOK_E1","Dr John","#"]],
+pyq:[["BED_PYQ_E1","University","#"]],
+imp:[["BED_IMP_E1","Faculty","#"]]
+}
+
+function loadTable(id,data){
+
+let html=""
+
+data.forEach(x=>{
+
+html+=`
+<tr>
+<td>
+<div class="fileName">${x[0]}</div>
+<div class="author">${x[1]}</div>
+</td>
+<td class="downloadCell">
+<button>Download</button>
+</td>
+</tr>
+`
+
+})
+
+document.getElementById(id).innerHTML=html
+
+}
+
+function changeMedium(){
+
+let medium=mediumSelect.value
+
+let data=medium==="tamil"?tamilData:englishData
+
+loadTable("booksTable",data.books)
+loadTable("pyqTable",data.pyq)
+loadTable("impTable",data.imp)
+
+}
+
+changeMedium()
+
+/* popup */
+
+function showForm(){
+
+activationPopup.style.display="none"
+formPopup.style.display="flex"
+
+deviceId.value=getDeviceId()
+
+}
+
+/* whatsapp */
+
+function sendWhatsapp(){
+
+let name=name.value
+let age=age.value
+let gender=gender.value
+let phone=phone.value
+let promo=promo.value
+let device=deviceId.value
+
+if(!name||!age||!gender||!phone||!promo){
+alert("Fill all details")
+return
+}
+
+let msg=`Name:${name}
+Age:${age}
+Gender:${gender}
+Phone:${phone}
+Promo:${promo}
+Device:${device}
+
+I paid. Please activate.`
+
+window.open(`https://wa.me/919655969516?text=${encodeURIComponent(msg)}`)
+
+}
+
+/* decrypt */
 
 async function decryptFile(){
 
 let file=bedFile.files[0]
 
 if(!file){
-
 alert("Upload .bed file")
 return
-
 }
 
 let device=getDeviceId()
 
 if(!activatedDevices[device]){
-
-alert("Device not activated")
-
+activationPopup.style.display="flex"
 return
-
 }
 
 const buffer=await file.arrayBuffer()
@@ -229,33 +394,64 @@ const iv=buffer.slice(0,12)
 const keyData=buffer.slice(12,44)
 const encrypted=buffer.slice(44)
 
-const key=await crypto.subtle.importKey(
-"raw",
-keyData,
-{name:"AES-GCM"},
-false,
-["decrypt"]
-)
+const key=await crypto.subtle.importKey("raw",keyData,{name:"AES-GCM"},false,["decrypt"])
 
-const decrypted=await crypto.subtle.decrypt(
-{name:"AES-GCM",iv:new Uint8Array(iv)},
-key,
-encrypted
-)
+const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv)},key,encrypted)
 
-/* convert to base64 */
-
-let base64 = btoa(
-String.fromCharCode(...new Uint8Array(decrypted))
-)
+let base64=btoa(String.fromCharCode(...new Uint8Array(decrypted)))
 
 sessionStorage.setItem("pdfData",base64)
-
-/* open viewer */
 
 window.open("viewer.html","_blank")
 
 }
+
+/* notifications */
+
+async function loadNotifications(){
+
+if(!navigator.onLine) return
+
+const list=document.getElementById("list")
+
+try{
+
+const proxy="https://api.codetabs.com/v1/proxy/?quest="
+const target="https://www.tnteu.ac.in/notifications.php?nid=5"
+
+const res=await fetch(proxy+encodeURIComponent(target))
+const html=await res.text()
+
+const doc=new DOMParser().parseFromString(html,"text/html")
+
+const wrappers=doc.querySelectorAll(".sectionWrapper")
+
+let links=[]
+
+wrappers.forEach(w=>{
+w.querySelectorAll("a").forEach(a=>links.push(a))
+})
+
+for(let i=0;i<Math.min(links.length,20);i++){
+
+let url="https://www.tnteu.ac.in/"+links[i].getAttribute("href")
+
+let div=document.createElement("div")
+
+div.innerHTML=`
+<p>${links[i].innerText}</p>
+<a href="${url}" target="_blank">Open Notification</a>
+`
+
+list.appendChild(div)
+
+}
+
+}catch{}
+
+}
+
+loadNotifications()
 
 </script>
 
