@@ -11,13 +11,14 @@
 
 body{
 margin:0;
-background:#111;
+background:#000;
 }
 
 iframe{
 width:100%;
 height:100vh;
 border:none;
+background:white;
 }
 
 </style>
@@ -30,17 +31,16 @@ border:none;
 
 <script>
 
-let base64=sessionStorage.getItem("pdfData")
+let url = sessionStorage.getItem("pdfURL")
 
-if(base64){
+if(url){
 
-let pdfUrl="data:application/pdf;base64,"+base64
-
-document.getElementById("pdfFrame").src=pdfUrl
+document.getElementById("pdfFrame").src = url
 
 }else{
 
-document.body.innerHTML="<h2 style='color:white;text-align:center;margin-top:40px'>No PDF Loaded</h2>"
+document.body.innerHTML =
+"<h2 style='color:white;text-align:center;margin-top:40px'>PDF not found</h2>"
 
 }
 
