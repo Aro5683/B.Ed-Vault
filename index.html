@@ -150,17 +150,32 @@ key,
 encrypted
 )
 
-/* create blob */
-
 const blob = new Blob([decrypted],{type:"application/pdf"})
 
-const url = URL.createObjectURL(blob)
+/* save to indexedDB */
 
-/* open viewer and pass url */
+const request = indexedDB.open("pdfDB",1)
 
-window.location.href = "viewer.html?file=" + encodeURIComponent(url)
+request.onupgradeneeded = function(e){
 
-  }
+let db = e.target.result
+db.createObjectStore("files")
+
+}
+
+request.onsuccess = function(e){
+
+let db = e.target.result
+let tx = db.transaction("files","readwrite")
+let store = tx.objectStore("files")
+
+store.put(blob,"pdf")
+
+window.location.href="viewer.html"
+
+}
+
+}
 </script>
 
 </body>
