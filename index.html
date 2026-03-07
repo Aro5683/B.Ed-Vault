@@ -3,11 +3,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>B.Ed Vault</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
 
@@ -22,28 +24,57 @@ body{
 background:#eef4ff;
 }
 
+/* HEADER */
+
 header{
 background:#0a6cff;
 color:white;
 padding:16px;
 text-align:center;
-font-size:20px;
+font-size:22px;
 font-weight:600;
 }
 
+/* CONTAINER */
+
 .container{
-padding:18px;
+padding:20px;
 max-width:900px;
 margin:auto;
 }
+
+/* CARD */
 
 .card{
 background:white;
 padding:20px;
 border-radius:14px;
 margin-bottom:20px;
-box-shadow:0 8px 30px rgba(0,0,0,0.08);
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
+
+/* UPLOAD */
+
+.uploadArea{
+border:2px dashed #7bb7ff;
+padding:35px;
+text-align:center;
+border-radius:12px;
+cursor:pointer;
+background:#f7fbff;
+}
+
+#bedFile{
+display:none;
+}
+
+#fileName{
+font-size:13px;
+margin-top:6px;
+color:#777;
+}
+
+/* BUTTON */
 
 button{
 background:#0a6cff;
@@ -54,12 +85,17 @@ border-radius:8px;
 cursor:pointer;
 }
 
+/* NOTIFICATIONS */
+
 .notice{
 background:white;
-padding:12px;
+padding:14px;
 border-radius:10px;
 margin-bottom:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
 }
+
+/* POPUP */
 
 .popup{
 position:fixed;
@@ -71,6 +107,7 @@ background:rgba(0,0,0,0.6);
 display:none;
 align-items:center;
 justify-content:center;
+z-index:9999;
 }
 
 .popupBox{
@@ -78,7 +115,7 @@ background:white;
 padding:25px;
 border-radius:14px;
 width:90%;
-max-width:400px;
+max-width:420px;
 text-align:center;
 }
 
@@ -91,20 +128,50 @@ border:1px solid #ddd;
 border-radius:8px;
 }
 
+/* PDF VIEWER */
+
+#pdfContainer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+z-index:10000;
+overflow:auto;
+touch-action:pan-x pan-y;
+}
+
+canvas{
+display:block;
+margin:auto;
+margin-bottom:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>B.Ed Vault</header>
+<header id="header">B.Ed Vault</header>
 
-<div class="container">
+<div class="container" id="mainUI">
 
 <div class="card">
 
-<h3>Decrypt PDF</h3>
+<h3>Upload .bed File to Decrypt</h3>
 
-<button onclick="openDecrypt()">Open Decrypt Tool</button>
+<label class="uploadArea" onclick="bedFile.click()">
+Upload .bed file
+<div id="fileName">No file selected</div>
+</label>
+
+<input type="file" id="bedFile" accept=".bed">
+
+<br><br>
+
+<button onclick="startDecrypt()">Decrypt</button>
 
 </div>
 
@@ -130,21 +197,24 @@ border-radius:8px;
 
 <h3>₹149</h3>
 
+<p>UPI: yourupi@upi</p>
+
 <button onclick="openForm()">Proceed</button>
 
 </div>
 
 </div>
 
-<!-- FORM -->
+<!-- DETAILS POPUP -->
 
 <div id="formPopup" class="popup">
 
 <div class="popupBox">
 
-<h3>Enter Details</h3>
+<h3>Your Details</h3>
 
 <input id="nameInput" placeholder="Name">
+
 <input id="ageInput" placeholder="Age">
 
 <select id="genderInput">
@@ -161,17 +231,21 @@ border-radius:8px;
 
 </div>
 
+<!-- PDF VIEWER -->
+
+<div id="pdfContainer">
+<div id="pdfViewer"></div>
+</div>
+
 <script>
 
-/* ACTIVATED DEVICE LIST */
+/* ACTIVATED DEVICE IDS */
 
 const activatedDevices=[
-"DEV-aqsbyel7f",
-  "DEV-5ukqa7g5w",
-  "DEV-9gfftyi59",
-  "DEV-76kkbt1c3"
-  
+"DEV-demo123"
 ]
+
+/* DEVICE ID */
 
 function getDeviceId(){
 
@@ -189,20 +263,30 @@ return id
 
 }
 
-/* OPEN DECRYPT */
+/* FILE NAME */
 
-function openDecrypt(){
+bedFile.onchange=function(){
+
+if(this.files.length){
+fileName.innerText=this.files[0].name
+}
+
+}
+
+/* POPUPS */
+
+function startDecrypt(){
 
 if(!activatedDevices.includes(getDeviceId())){
+
 subPopup.style.display="flex"
 return
-}
-
-location.href="decrypt.html"
 
 }
 
-/* FORM */
+decryptFile()
+
+}
 
 function openForm(){
 
@@ -220,13 +304,14 @@ function sendWhatsapp(){
 let name=nameInput.value
 let age=ageInput.value
 let gender=genderInput.value
+let device=getDeviceId()
 
-if(!name||!age||!gender)return
+if(!name||!age||!gender) return
 
 let msg=`Name:${name}
 Age:${age}
 Gender:${gender}
-Device:${getDeviceId()}
+Device:${device}
 
 Please activate.`
 
@@ -234,7 +319,7 @@ window.open("https://wa.me/919655969516?text="+encodeURIComponent(msg))
 
 }
 
-/* NOTIFICATIONS */
+/* TNTEU NOTIFICATIONS */
 
 async function loadNotifications(){
 
@@ -243,6 +328,8 @@ if(!activatedDevices.includes(getDeviceId())) return
 const proxy="https://api.codetabs.com/v1/proxy/?quest="
 const target="https://www.tnteu.ac.in/notifications.php?nid=5"
 
+try{
+
 const res=await fetch(proxy+encodeURIComponent(target))
 const html=await res.text()
 
@@ -250,23 +337,172 @@ const doc=new DOMParser().parseFromString(html,"text/html")
 
 const links=doc.querySelectorAll(".sectionWrapper a")
 
+noticeList.innerHTML=""
+
 links.forEach((a,i)=>{
 
-if(i>8)return
+if(i>10) return
+
+let url="https://www.tnteu.ac.in/"+a.getAttribute("href")
 
 let div=document.createElement("div")
-
 div.className="notice"
 
-div.innerText=a.innerText
+div.innerHTML=`
+<a href="${url}" target="_blank" style="text-decoration:none;color:#333;font-weight:500">
+${a.innerText}
+</a>
+`
 
 noticeList.appendChild(div)
 
 })
 
+}catch(e){}
+
 }
 
 loadNotifications()
+
+/* PDF VIEWER */
+
+let pdfDoc=null
+let baseScale=1
+let zoomScale=1
+let pdfData=null
+
+async function decryptFile(){
+
+let file=bedFile.files[0]
+
+if(!file) return
+
+document.getElementById("mainUI").style.display="none"
+document.getElementById("header").style.display="none"
+
+pdfContainer.style.display="block"
+
+const buffer=await file.arrayBuffer()
+
+const iv=buffer.slice(0,12)
+const keyData=buffer.slice(12,44)
+const encrypted=buffer.slice(44)
+
+const key=await crypto.subtle.importKey(
+"raw",
+keyData,
+{name:"AES-GCM"},
+false,
+["decrypt"]
+)
+
+const decrypted=await crypto.subtle.decrypt(
+{name:"AES-GCM",iv:new Uint8Array(iv)},
+key,
+encrypted
+)
+
+pdfData=new Uint8Array(decrypted)
+
+loadPDF()
+
+}
+
+async function loadPDF(){
+
+const loadingTask=pdfjsLib.getDocument({data:pdfData})
+
+pdfDoc=await loadingTask.promise
+
+const containerWidth=window.innerWidth
+
+const page=await pdfDoc.getPage(1)
+
+const viewport=page.getViewport({scale:1})
+
+baseScale=containerWidth/viewport.width
+
+zoomScale=1
+
+renderPages()
+
+}
+
+async function renderPages(){
+
+pdfViewer.innerHTML=""
+
+const scale=baseScale*zoomScale
+const dpr=window.devicePixelRatio||1
+
+for(let pageNum=1;pageNum<=pdfDoc.numPages;pageNum++){
+
+const page=await pdfDoc.getPage(pageNum)
+
+const viewport=page.getViewport({scale:scale})
+
+const canvas=document.createElement("canvas")
+const ctx=canvas.getContext("2d")
+
+canvas.width=viewport.width*dpr
+canvas.height=viewport.height*dpr
+
+canvas.style.width=viewport.width+"px"
+canvas.style.height=viewport.height+"px"
+
+ctx.scale(dpr,dpr)
+
+pdfViewer.appendChild(canvas)
+
+await page.render({canvasContext:ctx,viewport}).promise
+
+}
+
+}
+
+/* PINCH ZOOM */
+
+let startDist=0
+
+pdfContainer.addEventListener("touchstart",function(e){
+
+if(e.touches.length==2){
+startDist=getDistance(e.touches)
+}
+
+})
+
+pdfContainer.addEventListener("touchmove",function(e){
+
+if(e.touches.length==2){
+
+e.preventDefault()
+
+let newDist=getDistance(e.touches)
+
+let diff=newDist-startDist
+
+zoomScale+=diff*0.005
+
+if(zoomScale<1) zoomScale=1
+if(zoomScale>5) zoomScale=5
+
+startDist=newDist
+
+renderPages()
+
+}
+
+})
+
+function getDistance(touches){
+
+let dx=touches[0].clientX-touches[1].clientX
+let dy=touches[0].clientY-touches[1].clientY
+
+return Math.sqrt(dx*dx+dy*dy)
+
+}
 
 </script>
 
