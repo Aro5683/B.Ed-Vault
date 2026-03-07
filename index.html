@@ -9,13 +9,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-<meta name="theme-color" content="#0a6cff">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
-
-/* GLOBAL */
 
 *{
 margin:0;
@@ -42,14 +38,14 @@ font-weight:600;
 box-shadow:0 6px 25px rgba(0,0,0,0.15);
 }
 
-/* SECTIONS */
+/* SECTION */
 
 .section{
-padding:18px;
 display:none;
+padding:18px;
 }
 
-.active{
+.section.active{
 display:block;
 }
 
@@ -107,34 +103,13 @@ margin-top:10px;
 td{
 padding:14px;
 border-bottom:1px solid #eee;
-font-size:14px;
 }
 
 td:last-child{
 text-align:right;
 }
 
-/* SELECT */
-
-select{
-padding:8px;
-border-radius:8px;
-border:1px solid #ddd;
-margin-top:10px;
-}
-
-/* NOTIFICATIONS */
-
-.notice{
-background:white;
-padding:14px;
-border-radius:12px;
-margin-bottom:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.06);
-font-size:14px;
-}
-
-/* BOTTOM NAV */
+/* NAV */
 
 nav{
 position:fixed;
@@ -203,8 +178,8 @@ left:0;
 width:100%;
 height:100%;
 background:white;
+z-index:10000;
 overflow:auto;
-z-index:9999;
 }
 
 canvas{
@@ -218,7 +193,7 @@ margin-bottom:12px;
 
 <body>
 
-<header>B.Ed Vault</header>
+<header id="header">B.Ed Vault</header>
 
 <!-- BOOKS -->
 
@@ -285,15 +260,15 @@ Upload encrypted .bed file
 
 </div>
 
-<!-- POPUP -->
+<!-- SUB POPUP -->
 
 <div id="subPopup" class="popup">
 
 <div class="popupBox">
 
-<h2>B.Ed Vault Subscription</h2>
+<h2>B.Ed Vault Access</h2>
 
-<p>Access B.Ed Books, Notes and Circulars.</p>
+<p>Access B.Ed materials and circulars.</p>
 
 <h2 style="color:#0a6cff">₹149</h2>
 
@@ -307,16 +282,15 @@ Upload encrypted .bed file
 
 </div>
 
-<!-- DETAILS -->
+<!-- FORM POPUP -->
 
 <div id="formPopup" class="popup">
 
 <div class="popupBox">
 
-<h3>Your Details</h3>
+<h3>Enter Your Details</h3>
 
 <input id="nameInput" placeholder="Name">
-
 <input id="ageInput" placeholder="Age">
 
 <select id="genderInput">
@@ -325,9 +299,32 @@ Upload encrypted .bed file
 <option>Female</option>
 </select>
 
+<select id="agreeInput">
+<option value="">Allow WhatsApp group add?</option>
+<option>Agree</option>
+<option>Disagree</option>
+</select>
+
 <input id="deviceId" readonly>
 
 <button onclick="sendWhatsapp()">Send</button>
+<br><br>
+<button onclick="closePopup()">Cancel</button>
+
+</div>
+
+</div>
+
+<!-- ERROR POPUP -->
+
+<div id="errorPopup" class="popup">
+
+<div class="popupBox">
+
+<h3>Incomplete Details</h3>
+<p>Please fill all fields before sending.</p>
+
+<button onclick="closeError()">OK</button>
 
 </div>
 
@@ -411,16 +408,29 @@ subPopup.style.display="none"
 formPopup.style.display="none"
 }
 
+function closeError(){
+errorPopup.style.display="none"
+}
+
+/* WHATSAPP */
+
 function sendWhatsapp(){
 
 let name=nameInput.value
 let age=ageInput.value
 let gender=genderInput.value
+let agree=agreeInput.value
 let device=deviceId.value
+
+if(!name || !age || !gender || !agree){
+errorPopup.style.display="flex"
+return
+}
 
 let msg=`Name:${name}
 Age:${age}
 Gender:${gender}
+Agree:${agree}
 Device:${device}
 
 Please activate.`
@@ -478,51 +488,16 @@ renderTable("pyqTable",data[m].pyq)
 
 loadMedium()
 
-/* NOTIFICATIONS */
-
-async function loadNotifications(){
-
-if(!isActivated()) return
-
-const proxy="https://api.codetabs.com/v1/proxy/?quest="
-const target="https://www.tnteu.ac.in/notifications.php?nid=5"
-
-try{
-
-const res=await fetch(proxy+encodeURIComponent(target))
-const html=await res.text()
-
-const doc=new DOMParser().parseFromString(html,"text/html")
-
-const links=doc.querySelectorAll(".sectionWrapper a")
-
-links.forEach((a,i)=>{
-
-if(i>8)return
-
-let div=document.createElement("div")
-div.className="notice"
-div.innerText=a.innerText
-
-noticeList.appendChild(div)
-
-})
-
-}catch{}
-
-}
-
-loadNotifications()
-
-/* FAST PDF VIEWER */
-
-let pdfDoc
+/* PDF VIEWER */
 
 async function decryptFile(){
 
 let file=bedFile.files[0]
+if(!file) return
 
-if(!file) return alert("Upload file")
+document.getElementById("header").style.display="none"
+document.querySelector("nav").style.display="none"
+document.querySelectorAll(".section").forEach(s=>s.style.display="none")
 
 pdfContainer.style.display="block"
 
@@ -539,18 +514,11 @@ const decrypted=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(iv
 const pdfData=new Uint8Array(decrypted)
 
 const loadingTask=pdfjsLib.getDocument({data:pdfData})
+const pdfDoc=await loadingTask.promise
 
-pdfDoc=await loadingTask.promise
+for(let i=1;i<=pdfDoc.numPages;i++){
 
-renderPage(1)
-
-}
-
-/* Lazy render for speed */
-
-async function renderPage(num){
-
-const page=await pdfDoc.getPage(num)
+const page=await pdfDoc.getPage(i)
 
 const viewport=page.getViewport({scale:1.2})
 
@@ -564,23 +532,7 @@ pdfViewer.appendChild(canvas)
 
 await page.render({canvasContext:ctx,viewport}).promise
 
-if(num<pdfDoc.numPages){
-renderPage(num+1)
 }
-
-}
-
-/* PWA */
-
-if("serviceWorker" in navigator){
-
-let sw=`
-self.addEventListener('install',e=>self.skipWaiting());
-self.addEventListener('fetch',e=>{});
-`
-
-let blob=new Blob([sw],{type:'text/javascript'})
-navigator.serviceWorker.register(URL.createObjectURL(blob))
 
 }
 
