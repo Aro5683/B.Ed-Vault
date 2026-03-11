@@ -185,7 +185,68 @@ Download App
 <h3>🔔 TNTEU Updates</h3>
 <p>Latest notifications.</p>
 </div>
+   <script>
+    // Disable right-click
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
 
+    // Disable keyboard shortcuts for DevTools
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S" || e.key === "i" || e.key === "I" || e.key === "j" || e.key === "J" || e.key === "c" || e.key === "C")) {
+        e.preventDefault();
+      }
+    });
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J
+    document.onkeydown = function (e) {
+      if (e.keyCode == 123) { return false; }
+      if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { return false; }
+    };
+  </script>
+
+  <script>
+    const blockScreen = document.getElementById('blockScreen');
+
+    function detectDevTools() {
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+      const threshold = 250;
+
+      let devtoolsOpen = widthDiff > threshold || heightDiff > threshold;
+
+      const trap = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (trap) {
+        const start = new Date();
+        debugger;
+        const end = new Date();
+        if (end - start > 100) devtoolsOpen = true;
+      }
+
+      if (devtoolsOpen) {
+        window.location.href = "https://c.tenor.com/x4V9PRp9R-0AAAAC/tenor.gif";
+      } else {
+        if (blockScreen) blockScreen.style.display = 'none';
+        document.body.style.pointerEvents = 'auto';
+      }
+    }
+
+    setInterval(detectDevTools, 600);
+
+    // Block right-click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Block common dev hotkeys
+    document.addEventListener('keydown', function (event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key.toUpperCase())) ||
+        (event.ctrlKey && event.key.toLowerCase() === 'u')
+      ) {
+        event.preventDefault();
+      }
+    });
+  </script>
 </section>
 
 <footer>
