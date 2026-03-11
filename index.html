@@ -5,9 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>B.Ed Vault – Download</title>
+<title>B.Ed Vault App</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -15,212 +15,122 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Inter',sans-serif;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#f4f8ff;
-color:#1a1a1a;
-}
-
-/* NAVBAR */
-
-nav{
-background:white;
-padding:16px 22px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 3px 10px rgba(0,0,0,0.06);
-position:sticky;
-top:0;
-z-index:10;
-}
-
-.logo{
-font-size:20px;
-font-weight:600;
-color:#0d47a1;
-}
-
-nav a{
-text-decoration:none;
-margin-left:18px;
-color:#444;
-font-size:14px;
+background:#f3f8ff;
+color:#1f2937;
 }
 
 /* HERO */
 
 .hero{
-background:linear-gradient(135deg,#0d47a1,#1976d2);
-color:white;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
 text-align:center;
-padding:80px 20px 70px;
+padding:40px 20px;
+
+background:
+linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),
+linear-gradient(135deg,#6ec1e4,#1f6fe5);
+color:white;
 }
+
+/* HERO CONTENT */
+
+.heroContent{
+max-width:600px;
+}
+
+/* APP ICON */
+
+.hero img{
+width:130px;
+border-radius:28px;
+box-shadow:0 15px 40px rgba(0,0,0,0.35);
+margin-bottom:25px;
+}
+
+/* TITLE */
 
 .hero h1{
-font-size:34px;
-margin-bottom:12px;
+font-size:38px;
+margin-bottom:10px;
 }
 
+/* DESCRIPTION */
+
 .hero p{
-opacity:.9;
-margin-bottom:28px;
-font-size:15px;
-max-width:500px;
-margin-left:auto;
-margin-right:auto;
+font-size:16px;
+opacity:0.95;
+margin-bottom:30px;
+line-height:1.6;
 }
 
 /* DOWNLOAD BUTTON */
 
 .downloadBtn{
 background:white;
-color:#0d47a1;
-padding:14px 30px;
-border-radius:10px;
+color:#1f6fe5;
+padding:16px 38px;
+border-radius:14px;
 text-decoration:none;
 font-weight:600;
-display:inline-block;
-transition:.25s;
+font-size:16px;
+box-shadow:0 12px 30px rgba(0,0,0,0.25);
+transition:0.25s;
 }
 
 .downloadBtn:hover{
-transform:translateY(-3px);
-box-shadow:0 8px 20px rgba(0,0,0,0.2);
-}
-
-/* APP CARD */
-
-.appCard{
-background:white;
-margin-top:-50px;
-margin-left:20px;
-margin-right:20px;
-border-radius:16px;
-box-shadow:0 15px 35px rgba(0,0,0,0.08);
-padding:25px;
-text-align:center;
-}
-
-.appIcon{
-width:80px;
-height:80px;
-background:#1976d2;
-border-radius:18px;
-margin:auto;
-margin-bottom:15px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px;
-color:white;
-}
-
-.appTitle{
-font-size:20px;
-font-weight:600;
-margin-bottom:6px;
-}
-
-.appMeta{
-font-size:13px;
-color:#777;
+transform:translateY(-4px);
 }
 
 /* FEATURES */
 
 .features{
-padding:50px 20px;
-max-width:700px;
+padding:70px 20px;
+max-width:900px;
 margin:auto;
-}
-
-.sectionTitle{
-text-align:center;
-font-size:24px;
-margin-bottom:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
 }
 
 .feature{
 background:white;
-padding:18px;
-border-radius:12px;
-margin-bottom:12px;
-box-shadow:0 3px 10px rgba(0,0,0,0.05);
-display:flex;
-gap:12px;
-align-items:center;
-}
-
-.icon{
-width:38px;
-height:38px;
-background:#e3f2fd;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:18px;
-color:#1976d2;
-}
-
-.featureText{
-font-size:14px;
-color:#444;
-}
-
-/* DOWNLOAD SECTION */
-
-.downloadSection{
+padding:28px;
+border-radius:16px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
 text-align:center;
-padding:50px 20px;
 }
 
-.bigDownload{
-background:#1976d2;
-color:white;
-padding:16px 40px;
-border-radius:12px;
-font-size:16px;
-font-weight:600;
-text-decoration:none;
-display:inline-block;
-transition:.25s;
-}
-
-.bigDownload:hover{
-background:#0d47a1;
+.feature h3{
+color:#1f6fe5;
+margin-bottom:8px;
 }
 
 /* FOOTER */
 
 footer{
-margin-top:50px;
-background:#0d47a1;
-color:white;
 text-align:center;
-padding:22px;
-font-size:13px;
+padding:25px;
+font-size:14px;
+color:#666;
 }
 
-/* DESKTOP */
+/* MOBILE */
 
-@media(min-width:768px){
+@media(max-width:600px){
 
 .hero h1{
-font-size:42px;
+font-size:30px;
 }
 
-.features{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:16px;
-}
-
-.feature{
-margin-bottom:0;
+.hero p{
+font-size:15px;
 }
 
 }
@@ -231,88 +141,55 @@ margin-bottom:0;
 
 <body>
 
-<nav>
-
-<div class="logo">B.Ed Vault</div>
-
-<div>
-<a href="#features">Features</a>
-<a href="#download">Download</a>
-</div>
-
-</nav>
-
-<!-- HERO -->
-
 <section class="hero">
 
-<h1>B.Ed Study Materials App</h1>
+<div class="heroContent">
+
+<img src="logo.png">
+
+<h1>B.Ed Vault App</h1>
 
 <p>
-Books, Notes, Previous Question Papers and TNTEU Notifications in one place.
+Access B.Ed Books, Study Notes, Previous Question Papers and TNTEU Notifications in one secure app.
 </p>
 
-<a class="downloadBtn" href="YOUR_GITHUB_RAW_APK_LINK">
-Download APK
-</a>
-
-</section>
-
-<!-- APP CARD -->
-
-<div class="appCard">
-
-<div class="appIcon">📚</div>
-
-<div class="appTitle">B.Ed Vault</div>
-
-<div class="appMeta">
-Version 1.0 • Free • Android
-</div>
-
-</div>
-
-<!-- FEATURES -->
-
-<section id="features" class="features">
-
-<h2 class="sectionTitle">Features</h2>
-
-<div class="feature">
-<div class="icon">📖</div>
-<div class="featureText">Access B.Ed Books anytime</div>
-</div>
-
-<div class="feature">
-<div class="icon">📝</div>
-<div class="featureText">Study Notes for quick revision</div>
-</div>
-
-<div class="feature">
-<div class="icon">📑</div>
-<div class="featureText">Previous Year Question Papers</div>
-</div>
-
-<div class="feature">
-<div class="icon">🔔</div>
-<div class="featureText">Latest TNTEU Notifications</div>
-</div>
-
-</section>
-
-<!-- DOWNLOAD -->
-
-<section id="download" class="downloadSection">
-
-<a class="bigDownload" href="https://github.com/Aro5683/B.Ed-DB/releases/download/v1.4/B.Ed.Vault.apk">
+<a class="downloadBtn" href="https://github.com/Aro5683/B.Ed-DB/releases/download/v1.4/B.Ed.Vault.apk">
 Download App
 </a>
+
+</div>
+
+</section>
+
+
+<section class="features">
+
+<div class="feature">
+<h3>📚 B.Ed Books</h3>
+<p>All important books in one place.</p>
+</div>
+
+<div class="feature">
+<h3>📝 Study Notes</h3>
+<p>Quick revision notes.</p>
+</div>
+
+<div class="feature">
+<h3>📄 Question Papers</h3>
+<p>Previous year exam papers.</p>
+</div>
+
+<div class="feature">
+<h3>🔔 TNTEU Updates</h3>
+<p>Latest notifications.</p>
+</div>
 
 </section>
 
 <footer>
 
-© 2026 B.Ed Vault • Educational App
+© 2026 B.Ed Vault
+  <p>Made with love</p>
 
 </footer>
 
