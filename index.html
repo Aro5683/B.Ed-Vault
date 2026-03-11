@@ -4,9 +4,11 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" sizes="32x32" src="logo.png">
-<link rel="icon" type="image/png" sizes="16x16" src="logo.png">
-<link rel="apple-touch-icon" src="logo.png">
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/main/logo.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/main/logo.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Aro5683/B.Ed-Vault/main/logo.png">
+
 <title>B.Ed Vault App</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,13 +43,9 @@ linear-gradient(135deg,#6ec1e4,#1f6fe5);
 color:white;
 }
 
-/* HERO CONTENT */
-
 .heroContent{
 max-width:600px;
 }
-
-/* APP ICON */
 
 .hero img{
 width:130px;
@@ -56,14 +54,10 @@ box-shadow:0 15px 40px rgba(0,0,0,0.35);
 margin-bottom:25px;
 }
 
-/* TITLE */
-
 .hero h1{
 font-size:38px;
 margin-bottom:10px;
 }
-
-/* DESCRIPTION */
 
 .hero p{
 font-size:16px;
@@ -84,6 +78,7 @@ font-weight:600;
 font-size:16px;
 box-shadow:0 12px 30px rgba(0,0,0,0.25);
 transition:0.25s;
+cursor:pointer;
 }
 
 .downloadBtn:hover{
@@ -123,6 +118,67 @@ font-size:14px;
 color:#666;
 }
 
+/* POPUP */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.popupCard{
+background:white;
+color:#333;
+padding:30px;
+border-radius:16px;
+max-width:420px;
+width:90%;
+text-align:center;
+box-shadow:0 20px 50px rgba(0,0,0,0.35);
+animation:popupScale .25s ease;
+}
+
+@keyframes popupScale{
+from{
+transform:scale(.9);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.popupCard h2{
+margin-bottom:12px;
+color:#1f6fe5;
+}
+
+.popupCard p{
+font-size:14px;
+margin-bottom:15px;
+}
+
+.safeList{
+text-align:left;
+font-size:14px;
+margin-bottom:18px;
+line-height:1.6;
+}
+
+.timer{
+font-weight:600;
+color:#1f6fe5;
+font-size:18px;
+}
+
 /* MOBILE */
 
 @media(max-width:600px){
@@ -155,9 +211,9 @@ font-size:15px;
 Access B.Ed Books, Study Notes, Previous Question Papers and TNTEU Notifications in one secure app.
 </p>
 
-<a class="downloadBtn" href="https://github.com/Aro5683/B.Ed-DB/releases/download/v1.4/B.Ed.Vault.apk">
+<button class="downloadBtn" onclick="openDownloadPopup()">
 Download App
-</a>
+</button>
 
 </div>
 
@@ -185,76 +241,81 @@ Download App
 <h3>🔔 TNTEU Updates</h3>
 <p>Latest notifications.</p>
 </div>
-   <script>
-    // Disable right-click
-    document.addEventListener("contextmenu", function (e) {
-      e.preventDefault();
-    });
 
-    // Disable keyboard shortcuts for DevTools
-    document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S" || e.key === "i" || e.key === "I" || e.key === "j" || e.key === "J" || e.key === "c" || e.key === "C")) {
-        e.preventDefault();
-      }
-    });
-
-    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J
-    document.onkeydown = function (e) {
-      if (e.keyCode == 123) { return false; }
-      if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { return false; }
-    };
-  </script>
-
-  <script>
-    const blockScreen = document.getElementById('blockScreen');
-
-    function detectDevTools() {
-      const widthDiff = window.outerWidth - window.innerWidth;
-      const heightDiff = window.outerHeight - window.innerHeight;
-      const threshold = 250;
-
-      let devtoolsOpen = widthDiff > threshold || heightDiff > threshold;
-
-      const trap = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (trap) {
-        const start = new Date();
-        debugger;
-        const end = new Date();
-        if (end - start > 100) devtoolsOpen = true;
-      }
-
-      if (devtoolsOpen) {
-        window.location.href = "https://c.tenor.com/x4V9PRp9R-0AAAAC/tenor.gif";
-      } else {
-        if (blockScreen) blockScreen.style.display = 'none';
-        document.body.style.pointerEvents = 'auto';
-      }
-    }
-
-    setInterval(detectDevTools, 600);
-
-    // Block right-click
-    document.addEventListener('contextmenu', e => e.preventDefault());
-
-    // Block common dev hotkeys
-    document.addEventListener('keydown', function (event) {
-      if (
-        event.key === 'F12' ||
-        (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key.toUpperCase())) ||
-        (event.ctrlKey && event.key.toLowerCase() === 'u')
-      ) {
-        event.preventDefault();
-      }
-    });
-  </script>
 </section>
+
 
 <footer>
 
-© 2026 B.Ed Vault
-  <p>Made with love</p>
+© 2026 B.Ed Vault  
+<p>Made with love</p>
 
 </footer>
+
+
+<!-- DOWNLOAD POPUP -->
+
+<div id="downloadPopup" class="popup">
+
+<div class="popupCard">
+
+<h2> Hello Everyone</h2>
+<h4>Chrome may show a security warning</h4>
+<p>
+This APK is provided directly by the developer.</p><br>
+Because the app is not downloaded from the Google Play Store.
+</p>
+
+<div class="safeList">
+
+✔ The file is 100% Safe<br>
+✔ No malware or trackers<br>
+✔ Downloaded directly from the official source
+
+</div>
+
+<div class="timer">
+Download starting in <span id="countdown">8</span> seconds
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const apkLink="https://github.com/Aro5683/B.Ed-DB/releases/download/v1.4/B.Ed.Vault.apk"
+
+function openDownloadPopup(){
+
+document.getElementById("downloadPopup").style.display="flex"
+
+let time=8
+
+const counter=document.getElementById("countdown")
+
+counter.innerText=time
+
+const timer=setInterval(()=>{
+
+time--
+
+counter.innerText=time
+
+if(time<=0){
+
+clearInterval(timer)
+
+window.location.href=apkLink
+
+}
+
+},1000)
+
+}
+
+</script>
 
 </body>
 </html>
